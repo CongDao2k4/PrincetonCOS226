@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>GPA.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="GPA code in Java">
+<meta NAME="TITLE" CONTENT="GPA code in Java">
+<meta NAME="KEYWORDS" CONTENT="GPA,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>GPA.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "GPA.java">GPA.java</a>
+from <a href = "https://algs4.cs.princeton.edu/31elementary">&#167;3.1 Elementary Symbol Tables</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac GPA.java</span>
+<span class="comment"> *  Execution:    java GPA &lt; input.txt</span>
+<span class="comment"> *  Dependencies: ST.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Create a symbol table mapping letter grades to numerical</span>
+<span class="comment"> *  scores, then read a list of letter grades from standard input,</span>
+<span class="comment"> *  and print the GPA.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java GPA</span>
+<span class="comment"> *  A- B+ B+ B-</span>
+<span class="comment"> *  GPA = 3.25</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">GPA</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">        </span><span class="comment">// create symbol table of grades and values</span>
+<span class="normal">        </span><span class="usertype">ST&lt;String, Double&gt;</span><span class="normal"> grades </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> ST</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">,</span><span class="normal"> Double</span><span class="symbol">&gt;();</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"A"</span><span class="symbol">,</span><span class="normal">  </span><span class="number">4.00</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"B"</span><span class="symbol">,</span><span class="normal">  </span><span class="number">3.00</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"C"</span><span class="symbol">,</span><span class="normal">  </span><span class="number">2.00</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"D"</span><span class="symbol">,</span><span class="normal">  </span><span class="number">1.00</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"F"</span><span class="symbol">,</span><span class="normal">  </span><span class="number">0.00</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"A+"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">4.33</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"B+"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3.33</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"C+"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">2.33</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"A-"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3.67</span><span class="symbol">);</span>
+<span class="normal">        grades</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"B-"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">2.67</span><span class="symbol">);</span>
+
+
+<span class="normal">        </span><span class="comment">// read grades from standard input and compute gpa</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> total </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0.0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> </span><span class="symbol">!</span><span class="normal">StdIn</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">();</span><span class="normal"> n</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">String</span><span class="normal"> grade </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readString</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="type">double</span><span class="normal"> value </span><span class="symbol">=</span><span class="normal"> grades</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">grade</span><span class="symbol">);</span>
+<span class="normal">            total </span><span class="symbol">+=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="type">double</span><span class="normal"> gpa </span><span class="symbol">=</span><span class="normal"> total </span><span class="symbol">/</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"GPA = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> gpa</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+
+
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:11:30 EDT 2022.
+</small></address>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>TestBST.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="TestBST code in Java">
+<meta NAME="TITLE" CONTENT="TestBST code in Java">
+<meta NAME="KEYWORDS" CONTENT="TestBST,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>TestBST.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "TestBST.java">TestBST.java</a>
+from <a href = "https://algs4.cs.princeton.edu/32bst">&#167;3.2 Binary Search Trees</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac TestBST.java</span>
+<span class="comment"> *  Execution:    java TestBST</span>
+<span class="comment"> *  Dependencies: BST.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  A test client for BST.java.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java -ea TestBST</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">TestBST</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> test </span><span class="symbol">=</span><span class="normal"> </span><span class="string">"S E A R C H E X A M P L E"</span><span class="symbol">;</span>
+<span class="normal">        String</span><span class="symbol">[]</span><span class="normal"> keys </span><span class="symbol">=</span><span class="normal"> test</span><span class="symbol">.</span><span class="function">split</span><span class="symbol">(</span><span class="string">" "</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> keys</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="usertype">BST&lt;String, Integer&gt;</span><span class="normal"> st </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> BST</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">,</span><span class="normal"> Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">keys</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">],</span><span class="normal"> i</span><span class="symbol">);</span>
+
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"size = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"min  = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">min</span><span class="symbol">());</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"max  = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">max</span><span class="symbol">());</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+
+<span class="normal">        </span><span class="comment">// print keys in order using allKeys()</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Testing keys()"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"--------------------------------"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> s </span><span class="symbol">:</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">keys</span><span class="symbol">())</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">s </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// print keys in order using select</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Testing select"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"--------------------------------"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">();</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">select</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// test rank, floor, ceiling</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"key rank floor flor2 ceil"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"-------------------------"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">char</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="string">'A'</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;=</span><span class="normal"> </span><span class="string">'X'</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">String</span><span class="normal"> s </span><span class="symbol">=</span><span class="normal"> i </span><span class="symbol">+</span><span class="normal"> </span><span class="string">""</span><span class="symbol">;</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"%2s %4d %4s %4s %4s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> s</span><span class="symbol">,</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">rank</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">),</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">floor</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">),</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">floor2</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">),</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">ceiling</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// test range search and range count</span>
+<span class="normal">        String</span><span class="symbol">[]</span><span class="normal"> from </span><span class="symbol">=</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="string">"A"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"Z"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"X"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"0"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"B"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"C"</span><span class="normal"> </span><span class="cbracket">}</span><span class="symbol">;</span>
+<span class="normal">        String</span><span class="symbol">[]</span><span class="normal"> to   </span><span class="symbol">=</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="string">"Z"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"A"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"X"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"Z"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"G"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"L"</span><span class="normal"> </span><span class="cbracket">}</span><span class="symbol">;</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"range search"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"-------------------"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> from</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"%s-%s (%2d) : "</span><span class="symbol">,</span><span class="normal"> from</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">],</span><span class="normal"> to</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">],</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">(</span><span class="normal">from</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">],</span><span class="normal"> to</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]));</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> s </span><span class="symbol">:</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">keys</span><span class="symbol">(</span><span class="normal">from</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">],</span><span class="normal"> to</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]))</span>
+<span class="normal">                StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">s </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="symbol">);</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// delete the smallest keys</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> </span><span class="number">2</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            st</span><span class="symbol">.</span><span class="function">deleteMin</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"After deleting the smallest "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> </span><span class="number">2</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" keys"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"--------------------------------"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> s </span><span class="symbol">:</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">keys</span><span class="symbol">())</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">s </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// delete all the remaining keys</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">st</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            st</span><span class="symbol">.</span><span class="function">delete</span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">select</span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> </span><span class="number">2</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"After deleting the remaining keys"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"--------------------------------"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> s </span><span class="symbol">:</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">keys</span><span class="symbol">())</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">s </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"After adding back the keys"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"--------------------------------"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">keys</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">],</span><span class="normal"> i</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> s </span><span class="symbol">:</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">keys</span><span class="symbol">())</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">s </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:13:03 EDT 2022.
+</small></address>
+
+</html>

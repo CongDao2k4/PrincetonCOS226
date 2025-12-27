@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name=".lift12">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/wordnet/.lift/checkstyle-lift.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/wordnet/.lift/algs4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

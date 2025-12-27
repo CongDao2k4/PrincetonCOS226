@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>Interpreter.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="Interpreter code in Java">
+<meta NAME="TITLE" CONTENT="Interpreter code in Java">
+<meta NAME="KEYWORDS" CONTENT="Interpreter,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>Interpreter.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "Interpreter.java">Interpreter.java</a>
+from <a href = "https://algs4.cs.princeton.edu/35applications">&#167;3.5 Searching Applications</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac Interpreter.java</span>
+<span class="comment"> *  Execution:    java Interpreter</span>
+<span class="comment"> *  Dependencies: In.java ST.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Parses simple arithmetic expressions of the form z = x and</span>
+<span class="comment"> *  z = x + y, where x and y can be symbolic variables or real</span>
+<span class="comment"> *  numbers. Uses a symbol table to store the mapping between</span>
+<span class="comment"> *  variable names and their values.</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java Interpreter</span>
+<span class="comment"> *  &gt;&gt; x := 34</span>
+<span class="comment"> *  x = 34.0</span>
+<span class="comment"> *</span>
+<span class="comment"> *  &gt;&gt; y := 23 * x</span>
+<span class="comment"> *  y := 782.0</span>
+<span class="comment"> *</span>
+<span class="comment"> *  &gt;&gt; z := x ^ y</span>
+<span class="comment"> *  z := Infinity</span>
+<span class="comment"> *</span>
+<span class="comment"> *  &gt;&gt; z := y ^ 2</span>
+<span class="comment"> *  z := 611524.0</span>
+<span class="comment"> *</span>
+<span class="comment"> *  &gt;&gt; x</span>
+<span class="comment"> *  x := 34.0</span>
+<span class="comment"> *</span>
+<span class="comment"> *  &gt;&gt; x := sqrt 2</span>
+<span class="comment"> *  x := 1.4142135623730951</span>
+<span class="comment"> *</span>
+<span class="comment"> *  &gt;&gt; [Ctrl-d]</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Remarks</span>
+<span class="comment"> *  -------</span>
+<span class="comment"> *</span>
+<span class="comment"> *   - Currently allows values on the LHS, e.g., 17 = x + y,</span>
+<span class="comment"> *     and treats "17" as a variable name.</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">Interpreter</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">        </span><span class="usertype">ST&lt;String, Double&gt;</span><span class="normal"> st </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> ST</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">,</span><span class="normal"> Double</span><span class="symbol">&gt;();</span>
+
+<span class="normal">        </span><span class="comment">// read in one line at a time and parse</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> line</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="usertype">In</span><span class="normal"> stdin </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">In</span><span class="symbol">();</span>
+<span class="normal">        System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="string">"&gt;&gt; "</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">line </span><span class="symbol">=</span><span class="normal"> stdin</span><span class="symbol">.</span><span class="function">readLine</span><span class="symbol">())</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            String</span><span class="symbol">[]</span><span class="normal"> tokens </span><span class="symbol">=</span><span class="normal"> line</span><span class="symbol">.</span><span class="function">split</span><span class="symbol">(</span><span class="string">"</span><span class="specialchar">\\</span><span class="string">s"</span><span class="symbol">);</span>
+
+<span class="normal">            </span><span class="comment">// singe variable - just print out its value</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">tokens</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal">  </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> zvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+<span class="normal">                System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">zvar </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" := "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">));</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="comment">// z = x</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">tokens</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> zvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> eq   </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> xvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">2</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">eq</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">":="</span><span class="symbol">))</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Illegal assignment"</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="type">double</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">contains</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">))</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal">                   x </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="function">parseDouble</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+<span class="normal">                st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> x</span><span class="symbol">);</span>
+<span class="normal">                System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">zvar </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" := "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">));</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="comment">// z = function x</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">tokens</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> zvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> eq   </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> func </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">2</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> xvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">3</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">eq</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">":="</span><span class="symbol">))</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Illegal assignment"</span><span class="symbol">);</span>
+
+<span class="normal">                </span><span class="type">double</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">contains</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">))</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal">                   x </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="function">parseDouble</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+
+<span class="normal">                </span><span class="keyword">if</span><span class="normal">      </span><span class="symbol">(</span><span class="normal">func</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"sin"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">sin</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">));</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">func</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"cos"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">cos</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">));</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">func</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"sqrt"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">sqrt</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">));</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">func</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"-"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Illegal function"</span><span class="symbol">);</span>
+<span class="normal">                System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">zvar </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" := "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">));</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="comment">// z = x + y</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">tokens</span><span class="symbol">.</span><span class="normal">length </span><span class="symbol">==</span><span class="normal"> </span><span class="number">5</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> zvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> eq   </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> xvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">2</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> op   </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">3</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> yvar </span><span class="symbol">=</span><span class="normal"> tokens</span><span class="symbol">[</span><span class="number">4</span><span class="symbol">];</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">eq</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">":="</span><span class="symbol">))</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Illegal assignment"</span><span class="symbol">);</span>
+
+<span class="normal">                </span><span class="type">double</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">contains</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">))</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal">                   x </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="function">parseDouble</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+
+<span class="normal">                </span><span class="type">double</span><span class="normal"> y</span><span class="symbol">;</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">contains</span><span class="symbol">(</span><span class="normal">yvar</span><span class="symbol">))</span><span class="normal"> y </span><span class="symbol">=</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal">                   y </span><span class="symbol">=</span><span class="normal"> Double</span><span class="symbol">.</span><span class="function">parseDouble</span><span class="symbol">(</span><span class="normal">xvar</span><span class="symbol">);</span>
+
+<span class="normal">                </span><span class="keyword">if</span><span class="normal">      </span><span class="symbol">(</span><span class="normal">op</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"+"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> x </span><span class="symbol">+</span><span class="normal"> y</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">op</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"-"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> x </span><span class="symbol">-</span><span class="normal"> y</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">op</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"*"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> x </span><span class="symbol">*</span><span class="normal"> y</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">op</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"/"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> x </span><span class="symbol">/</span><span class="normal"> y</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">op</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="string">"^"</span><span class="symbol">))</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">,</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">pow</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">,</span><span class="normal"> y</span><span class="symbol">));</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Illegal operator"</span><span class="symbol">);</span>
+<span class="normal">                System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">zvar </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">zvar</span><span class="symbol">));</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">RuntimeException</span><span class="symbol">(</span><span class="string">"Illegal expression"</span><span class="symbol">);</span>
+<span class="normal">            System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">            System</span><span class="symbol">.</span><span class="normal">out</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="string">"&gt;&gt; "</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:16:42 EDT 2022.
+</small></address>
+
+</html>

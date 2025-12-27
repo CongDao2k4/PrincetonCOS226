@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>BaconHistogram.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="BaconHistogram code in Java">
+<meta NAME="TITLE" CONTENT="BaconHistogram code in Java">
+<meta NAME="KEYWORDS" CONTENT="BaconHistogram,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>BaconHistogram.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "BaconHistogram.java">BaconHistogram.java</a>
+from <a href = "https://algs4.cs.princeton.edu/41graph">&#167;4.1 Undirected Graphs</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac BaconHistogram.java</span>
+<span class="comment"> *  Execution:    java BaconHistogram input.txt delimiter actor</span>
+<span class="comment"> *  Dependencies: SymbolGraph.java Graph.java In.java BreadthFirstPaths.java</span>
+<span class="comment"> *  Data files:   </span><span class="url">https://algs4.cs.princeton.edu/41graph/movies.txt</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Reads in a data file containing movie records (a movie followed by a list</span>
+<span class="comment"> *  of actors appearing in that movie), and runs breadth first search to</span>
+<span class="comment"> *  find the shortest distance from the source (Kevin Bacon) to each other</span>
+<span class="comment"> *  actor and movie. After computing the Kevin Bacon numbers, the programs</span>
+<span class="comment"> *  prints a histogram of the number of actors with each Kevin Bacon number.</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java BaconHistogram movies.txt "/" "Bacon, Kevin"</span>
+<span class="comment"> *    0        1</span>
+<span class="comment"> *    1     1324</span>
+<span class="comment"> *    2    70717</span>
+<span class="comment"> *    3    40862</span>
+<span class="comment"> *    4     1591</span>
+<span class="comment"> *    5      125</span>
+<span class="comment"> *  Inf        0</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Remark: hard to identify actors with infinite bacon numbers because</span>
+<span class="comment"> *  we can't tell whether an unreachable vertex is an actor or movie.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">BaconHistogram</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> filename  </span><span class="symbol">=</span><span class="normal"> args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> delimiter </span><span class="symbol">=</span><span class="normal"> args</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> source    </span><span class="symbol">=</span><span class="normal"> args</span><span class="symbol">[</span><span class="number">2</span><span class="symbol">];</span>
+
+<span class="normal">        </span><span class="usertype">SymbolGraph</span><span class="normal"> sg </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">SymbolGraph</span><span class="symbol">(</span><span class="normal">filename</span><span class="symbol">,</span><span class="normal"> delimiter</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="usertype">Graph</span><span class="normal"> G </span><span class="symbol">=</span><span class="normal"> sg</span><span class="symbol">.</span><span class="function">graph</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">sg</span><span class="symbol">.</span><span class="function">contains</span><span class="symbol">(</span><span class="normal">source</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">source </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" not in database."</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// run breadth-first search from s</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> s </span><span class="symbol">=</span><span class="normal"> sg</span><span class="symbol">.</span><span class="function">indexOf</span><span class="symbol">(</span><span class="normal">source</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="usertype">BreadthFirstPaths</span><span class="normal"> bfs </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">BreadthFirstPaths</span><span class="symbol">(</span><span class="normal">G</span><span class="symbol">,</span><span class="normal"> s</span><span class="symbol">);</span>
+
+
+<span class="normal">        </span><span class="comment">// compute histogram of Kevin Bacon numbers - 100 for infinity</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> MAX_BACON </span><span class="symbol">=</span><span class="normal"> </span><span class="number">100</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> hist </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">int</span><span class="symbol">[</span><span class="normal">MAX_BACON </span><span class="symbol">+</span><span class="normal"> </span><span class="number">1</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> v</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> bacon </span><span class="symbol">=</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">min</span><span class="symbol">(</span><span class="normal">MAX_BACON</span><span class="symbol">,</span><span class="normal"> bfs</span><span class="symbol">.</span><span class="function">distTo</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">));</span>
+<span class="normal">            hist</span><span class="symbol">[</span><span class="normal">bacon</span><span class="symbol">]++;</span>
+
+<span class="normal">            </span><span class="comment">// to print actors and movies with large bacon numbers</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bacon</span><span class="symbol">/</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">7</span><span class="normal"> </span><span class="symbol">&amp;&amp;</span><span class="normal"> bacon </span><span class="symbol">&lt;</span><span class="normal"> MAX_BACON</span><span class="symbol">)</span>
+<span class="normal">                StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"%d %s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> bacon</span><span class="symbol">/</span><span class="number">2</span><span class="symbol">,</span><span class="normal"> sg</span><span class="symbol">.</span><span class="function">nameOf</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// print out histogram - even indices are actors</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> MAX_BACON</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">+=</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">hist</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"%3d %8d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> i</span><span class="symbol">/</span><span class="number">2</span><span class="symbol">,</span><span class="normal"> hist</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"Inf %8d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> hist</span><span class="symbol">[</span><span class="normal">MAX_BACON</span><span class="symbol">]);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:22:35 EDT 2022.
+</small></address>
+
+</html>

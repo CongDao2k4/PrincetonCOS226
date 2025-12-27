@@ -1,0 +1,56 @@
+để chuyển terminal đến file java trong mục src , cần nhập cd src
+với thư viện .jar : 
+javac -cp .;D:\Hoc_Tap\ComputerScience- Princeton University\arrays\.lift\stdlib.jar D:\Hoc_Tap\ComputerScience- Princeton University\arrays\DiscreteDistribution.java
+java -cp .;D:\Hoc_Tap\ComputerScience- Princeton University\arrays\.lift\stdlib.jar DiscreteDistribution
+- Các thư viện mở rộng thường cần add:
+   + file -> project structure -> libraies - > "+"
+   + file _> project structure -> modules  -> "+" jar, lib,..
+- Sau đó ấn có thế dùng chạy trên cmd, terminal nhưng sẽ lỗi nhiều vì terminal ko nhận đc classpath như chạy thẳng luôn, Cách thay thế là ấn vào nút biểu tượng run ở đầu dòng code -> Modify Run Configuration..; hoặc ấn vào nút tùy chọn trên đầu -> Run Configuration..
+Nhược điểm khi chạy StdIn là ko bao giờ dừng --> nên chỉ dùng với luồn dữ liệu đầu vào hữu hạn
+Nếu muốn dừng thì dùng "Ctrl + d", "Ctrl + z"
+- Nếu bạn muốn chạy một chương trình Java từ dòng lệnh CMD với thư viện jar bên ngoài, bạn cần chỉ định đường dẫn               đầy đủ đến thư viện jar trong lệnh chạy. Dưới đây là cách bạn có thể thực hiện:
+
+Mở Command Prompt (CMD) với quyền quản trị viên1.
+Điều hướng đến thư mục chứa file .java của bạn.
+Biên dịch file .java của bạn sử dụng lệnh sau:
+javac -cp .;D:/Bai tap/your-library.jar YourProgram.java
+
+Trong đó, D:/Bai tap/your-library.jar là đường dẫn đầy đủ đến thư viện jar mà bạn muốn sử dụng, và YourProgram.java là tên của chương trình Java của bạn. 4. Chạy chương trình Java của bạn sử dụng lệnh sau:
+
+java -cp .;D:/Bai tap/your-library.jar YourProgram
+
+Lưu ý: Trên hệ điều hành Linux hoặc MacOS, bạn sẽ cần sử dụng : thay vì ; để phân tách các mục trong classpath2
+- Để chạy một chương trình Java từ terminal của IntelliJ IDEA với thư viện jar bên ngoài, bạn cần chỉ định đường dẫn đầy đủ đến thư viện jar trong lệnh chạy. Dưới đây là cách bạn có thể thực hiện:
+
+Mở terminal trong IntelliJ IDEA.
+Điều hướng đến thư mục chứa file .java của bạn.
+Biên dịch file .java của bạn sử dụng lệnh sau:
+javac -cp .;D:/Bai tap/your-library.jar YourProgram.java
+
+Trong đó, D:/Bai tap/your-library.jar là đường dẫn đầy đủ đến thư viện jar mà bạn muốn sử dụng, và YourProgram.java là tên của chương trình Java của bạn. 4. Chạy chương trình Java của bạn sử dụng lệnh sau:
+
+java -cp .;D:/Bai tap/your-library.jar YourProgram
+
+Lưu ý: Trên hệ điều hành Linux hoặc MacOS, bạn sẽ cần sử dụng : thay vì ; để phân tách các mục trong classpath1.
+
+Hãy chắc chắn rằng bạn đã cài đặt Java Development Kit (JDK) trên máy tính của bạn. Nếu bạn gặp vấn đề, hãy thử cập nhật Java.
+-  Để chạy code Java với thư viện jar bên ngoài, bạn cần chỉ định đường dẫn đến thư viện jar đó trong classpath. Trên cmd, bạn có thể chỉ định classpath bằng cách sử dụng biến môi trường CLASSPATH. Ví dụ:
+
+set CLASSPATH=.;C:\my_jars\my_lib.jar
+Sau đó, bạn có thể chạy chương trình Java của mình bằng cách sử dụng lệnh java. Ví dụ:
+
+java MyClass
+Trên PowerShell, bạn có thể chỉ định classpath bằng cách sử dụng biến môi trường $env:CLASSPATH. Ví dụ:
+
+$env:CLASSPATH=".;C:\my_jars\my_lib.jar"
+Sau đó, bạn có thể chạy chương trình Java của mình bằng cách sử dụng lệnh java. Ví dụ:
+
+java MyClass
+Nếu bạn gặp lỗi no source file khi chạy chương trình Java trên PowerShell, có thể là do bạn đã chỉ định đường dẫn đến thư viện jar không chính xác. Hãy đảm bảo rằng đường dẫn đến thư viện jar là đường dẫn tuyệt đối, và rằng thư viện jar đó nằm trong thư mục có thể truy cập được từ PowerShell.
+
+Dưới đây là một số cách để kiểm tra xem bạn đã chỉ định đường dẫn đến thư viện jar chính xác chưa:
+
+Mở PowerShell và sử dụng lệnh dir để liệt kê các thư mục và tệp trong thư mục hiện tại. Nếu thư viện jar của bạn nằm trong thư mục hiện tại, bạn sẽ thấy nó được liệt kê trong kết quả của lệnh dir.
+Mở PowerShell và sử dụng lệnh cd để chuyển đến thư mục chứa thư viện jar của bạn. Sau đó, sử dụng lệnh dir để liệt kê các tệp trong thư mục đó. Nếu thư viện jar của bạn nằm trong thư mục đó, bạn sẽ thấy nó được liệt kê trong kết quả của lệnh dir.
+Mở PowerShell và sử dụng lệnh echo $env:CLASSPATH để xem giá trị của biến môi trường $env:CLASSPATH. Đường dẫn đến thư viện jar của bạn phải được chỉ định trong giá trị của biến môi trường này.
+Nếu bạn đã xác minh rằng bạn đã chỉ định đường dẫn đến thư viện jar chính xác, nhưng bạn vẫn gặp lỗi no source file, thì có thể là do thư viện jar đó bị hỏng hoặc không tương thích với phiên bản Java mà bạn đang sử dụng. Hãy thử tải xuống lại thư viện jar từ nguồn đáng tin cậy, hoặc thử sử dụng phiên bản Java mới hơn.

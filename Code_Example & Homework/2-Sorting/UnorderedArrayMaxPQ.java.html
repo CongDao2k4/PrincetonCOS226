@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>UnorderedArrayMaxPQ.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="UnorderedArrayMaxPQ code in Java">
+<meta NAME="TITLE" CONTENT="UnorderedArrayMaxPQ code in Java">
+<meta NAME="KEYWORDS" CONTENT="UnorderedArrayMaxPQ,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>UnorderedArrayMaxPQ.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "UnorderedArrayMaxPQ.java">UnorderedArrayMaxPQ.java</a>
+from <a href = "https://algs4.cs.princeton.edu/24pq">&#167;2.4 Priority Queues</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac UnorderedArrayMaxPQ.java</span>
+<span class="comment"> *  Execution:    java UnorderedArrayMaxPQ</span>
+<span class="comment"> *  Dependencies: StdOut.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Priority queue implementation with an unsorted array.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Limitations</span>
+<span class="comment"> *  -----------</span>
+<span class="comment"> *   - no array resizing</span>
+<span class="comment"> *   - does not check for overflow or underflow.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">UnorderedArrayMaxPQ</span><span class="symbol">&lt;</span><span class="normal">Key </span><span class="usertype">extends</span><span class="normal"> Comparable</span><span class="symbol">&lt;</span><span class="normal">Key</span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> Key</span><span class="symbol">[]</span><span class="normal"> pq</span><span class="symbol">;</span><span class="normal">      </span><span class="comment">// elements</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal">         </span><span class="comment">// number of elements</span>
+
+<span class="normal">    </span><span class="comment">// set inititial size of heap to hold size elements</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">UnorderedArrayMaxPQ</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> capacity</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        pq </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Key</span><span class="symbol">[])</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Comparable</span><span class="symbol">[</span><span class="normal">capacity</span><span class="symbol">];</span>
+<span class="normal">        n </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">isEmpty</span><span class="symbol">()</span><span class="normal">   </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> n </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">size</span><span class="symbol">()</span><span class="normal">          </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal">      </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">insert</span><span class="symbol">(</span><span class="usertype">Key</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal">  </span><span class="cbracket">{</span><span class="normal"> pq</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">++]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">;</span><span class="normal">   </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Key</span><span class="normal"> </span><span class="function">delMax</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">less</span><span class="symbol">(</span><span class="normal">max</span><span class="symbol">,</span><span class="normal"> i</span><span class="symbol">))</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="function">exch</span><span class="symbol">(</span><span class="normal">max</span><span class="symbol">,</span><span class="normal"> n</span><span class="symbol">-</span><span class="number">1</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> pq</span><span class="symbol">[--</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/***************************************************************************</span>
+<span class="comment">    * Helper functions.</span>
+<span class="comment">    ***************************************************************************/</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">less</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> j</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> pq</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">].</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">pq</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">])</span><span class="normal"> </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">exch</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> j</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Key</span><span class="normal"> swap </span><span class="symbol">=</span><span class="normal"> pq</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        pq</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pq</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">];</span>
+<span class="normal">        pq</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> swap</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/***************************************************************************</span>
+<span class="comment">    * Test routine.</span>
+<span class="comment">    ***************************************************************************/</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">UnorderedArrayMaxPQ&lt;String&gt;</span><span class="normal"> pq </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> UnorderedArrayMaxPQ</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">&gt;(</span><span class="number">10</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">insert</span><span class="symbol">(</span><span class="string">"this"</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">insert</span><span class="symbol">(</span><span class="string">"is"</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">insert</span><span class="symbol">(</span><span class="string">"a"</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">insert</span><span class="symbol">(</span><span class="string">"test"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">pq</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">pq</span><span class="symbol">.</span><span class="function">delMax</span><span class="symbol">());</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:07:21 EDT 2022.
+</small></address>
+
+</html>

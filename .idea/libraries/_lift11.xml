@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name=".lift11">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/cos-226-main/seam/.lift/checkstyle-lift.jar!/" />
+      <root url="jar://$PROJECT_DIR$/cos-226-main/seam/.lift/algs4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

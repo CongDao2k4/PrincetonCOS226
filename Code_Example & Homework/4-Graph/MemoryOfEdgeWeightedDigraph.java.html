@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>MemoryOfEdgeWeightedDigraph.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="MemoryOfEdgeWeightedDigraph code in Java">
+<meta NAME="TITLE" CONTENT="MemoryOfEdgeWeightedDigraph code in Java">
+<meta NAME="KEYWORDS" CONTENT="MemoryOfEdgeWeightedDigraph,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>MemoryOfEdgeWeightedDigraph.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "MemoryOfEdgeWeightedDigraph.java">MemoryOfEdgeWeightedDigraph.java</a>
+from <a href = "https://algs4.cs.princeton.edu/44sp">&#167;4.4 Shortest Paths</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac -cp .:jama.jar:classmexer.jar MemoryOfEdgeWeightedDigraph.java</span>
+<span class="comment"> *  Execution:    java  -cp .:jama.jar:classmexer.jar -XX:-UseCompressedOops -javaagent:classmexer.jar MemoryOfEdgeWeightedDigraph</span>
+<span class="comment"> *  Dependencies: EdgeWeightedDigraph.java MultipleLinearRegression.java StdOut.java classmexer.jar jama.jar</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java -cp .:jama.jar:classmexer.jar -XX:-UseCompressedOops -javaagent:classmexer.jar MemoryOfEdgeWeightedDigraph</span>
+<span class="comment"> *  memory of an EdgeWeightedDigraph with V vertices and E edges:</span>
+<span class="comment"> *  56.00 + 40.00 V + 72.00 E bytes (R^2 = 1.000)</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> com</span><span class="symbol">.</span><span class="normal">javamex</span><span class="symbol">.</span><span class="normal">classmexer</span><span class="symbol">.</span><span class="normal">MemoryUtil</span><span class="symbol">;</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">MemoryOfEdgeWeightedDigraph</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">DirectedEdge</span><span class="normal"> e </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">DirectedEdge</span><span class="symbol">(</span><span class="number">123456</span><span class="symbol">,</span><span class="normal"> </span><span class="number">654321</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1.0</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"size of DirectedEdge = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">memoryUsageOf</span><span class="symbol">(</span><span class="normal">e</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" bytes"</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> </span><span class="number">40</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> V </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">int</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> E </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">int</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+
+<span class="normal">        </span><span class="comment">// build random graphs and compute memory usage</span>
+<span class="normal">        </span><span class="type">long</span><span class="symbol">[]</span><span class="normal"> memory </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">long</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            V</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">2</span><span class="symbol">*</span><span class="normal">StdRandom</span><span class="symbol">.</span><span class="function">uniformInt</span><span class="symbol">(</span><span class="number">500</span><span class="symbol">);</span><span class="normal">       </span><span class="comment">// vertices</span>
+<span class="normal">            E</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> V</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> StdRandom</span><span class="symbol">.</span><span class="function">uniformInt</span><span class="symbol">(</span><span class="number">10</span><span class="symbol">);</span><span class="normal">   </span><span class="comment">// edges</span>
+<span class="normal">            </span><span class="usertype">EdgeWeightedDigraph</span><span class="normal"> G </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">EdgeWeightedDigraph</span><span class="symbol">(</span><span class="normal">V</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]);</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> j </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> j </span><span class="symbol">&lt;</span><span class="normal"> E</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span><span class="normal"> j</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> StdRandom</span><span class="symbol">.</span><span class="function">uniformInt</span><span class="symbol">(</span><span class="normal">V</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]);</span>
+<span class="normal">                </span><span class="type">int</span><span class="normal"> w </span><span class="symbol">=</span><span class="normal"> StdRandom</span><span class="symbol">.</span><span class="function">uniformInt</span><span class="symbol">(</span><span class="normal">V</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]);</span>
+<span class="normal">                </span><span class="type">double</span><span class="normal"> weight </span><span class="symbol">=</span><span class="normal"> StdRandom</span><span class="symbol">.</span><span class="function">uniformDouble</span><span class="symbol">(</span><span class="number">0.0</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1.0</span><span class="symbol">);</span>
+<span class="normal">                G</span><span class="symbol">.</span><span class="function">addEdge</span><span class="symbol">(</span><span class="keyword">new</span><span class="normal"> </span><span class="function">DirectedEdge</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">,</span><span class="normal"> w</span><span class="symbol">,</span><span class="normal"> weight</span><span class="symbol">));</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            memory</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">deepMemoryUsageOf</span><span class="symbol">(</span><span class="normal">G</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// build multiple linear regression coefficients</span>
+<span class="normal">        </span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> y </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">double</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            y</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> memory</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="type">double</span><span class="symbol">[][]</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">double</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">][</span><span class="number">3</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            x</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">][</span><span class="number">0</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1.0</span><span class="symbol">;</span>
+<span class="normal">            x</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">][</span><span class="number">1</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> V</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">            x</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">][</span><span class="number">2</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> E</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+
+<span class="normal">        </span><span class="usertype">MultipleLinearRegression</span><span class="normal"> regression </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">MultipleLinearRegression</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">,</span><span class="normal"> y</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"memory of an EdgeWeightedDigraph with V vertices and E edges:"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"%.2f + %.2f V + %.2f E bytes (R^2 = %.3f)</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span>
+<span class="normal">                      regression</span><span class="symbol">.</span><span class="function">beta</span><span class="symbol">(</span><span class="number">0</span><span class="symbol">),</span><span class="normal"> regression</span><span class="symbol">.</span><span class="function">beta</span><span class="symbol">(</span><span class="number">1</span><span class="symbol">),</span><span class="normal"> regression</span><span class="symbol">.</span><span class="function">beta</span><span class="symbol">(</span><span class="number">2</span><span class="symbol">),</span><span class="normal"> regression</span><span class="symbol">.</span><span class="function">R2</span><span class="symbol">());</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:32:25 EDT 2022.
+</small></address>
+
+</html>

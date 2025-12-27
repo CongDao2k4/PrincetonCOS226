@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>OneWay.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="OneWay code in Java">
+<meta NAME="TITLE" CONTENT="OneWay code in Java">
+<meta NAME="KEYWORDS" CONTENT="OneWay,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>OneWay.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "OneWay.java">OneWay.java</a>
+from <a href = "https://algs4.cs.princeton.edu/34hash">&#167;3.4 Hash Tables</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.6
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac OneWay.java</span>
+<span class="comment"> *  Execution:    java OneWay password</span>
+<span class="comment"> *  Dependencies: StdOut.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Comptue the SHA1 of the command line argument.</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> * % java OneWay "The quick brown fox jumps over the lazy dog"</span>
+<span class="comment"> * 2fd4e1c6 7a2d28fc ed849ee1 bb76e739 1b93eb12</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java OneWay test</span>
+<span class="comment"> *  a94a8fe5 ccb19ba6 1c4c0873 d391e987 982fbbd3</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java OneWay ""</span>
+<span class="comment"> *  da39a3ee 5e6b4b0d 3255bfef 95601890 afd80709</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">security</span><span class="symbol">.</span><span class="normal">MessageDigest</span><span class="symbol">;</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">OneWay</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> password </span><span class="symbol">=</span><span class="normal"> args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+
+<span class="normal">        </span><span class="comment">// get SHA1 algorithm object and compute SHA1 of password</span>
+<span class="normal">        </span><span class="usertype">MessageDigest</span><span class="normal"> sha1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">byte</span><span class="symbol">[]</span><span class="normal"> bytes</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            sha1 </span><span class="symbol">=</span><span class="normal"> MessageDigest</span><span class="symbol">.</span><span class="function">getInstance</span><span class="symbol">(</span><span class="string">"SHA1"</span><span class="symbol">);</span>
+<span class="normal">            bytes </span><span class="symbol">=</span><span class="normal"> sha1</span><span class="symbol">.</span><span class="function">digest</span><span class="symbol">(</span><span class="normal">password</span><span class="symbol">.</span><span class="function">getBytes</span><span class="symbol">(</span><span class="string">"ISO-8859-1"</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">java</span><span class="symbol">.</span><span class="normal">security</span><span class="symbol">.</span><span class="usertype">NoSuchAlgorithmException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">e</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">java</span><span class="symbol">.</span><span class="normal">io</span><span class="symbol">.</span><span class="usertype">UnsupportedEncodingException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">e</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// convert bytes to hex, careful to handle leading 0s and 2s complement</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> hex </span><span class="symbol">=</span><span class="normal"> </span><span class="string">"0123456789abcdef"</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> bytes</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">%</span><span class="normal"> </span><span class="number">4</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="string">" "</span><span class="symbol">);</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">hex</span><span class="symbol">.</span><span class="function">charAt</span><span class="symbol">((</span><span class="normal">bytes</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xF0</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">));</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">hex</span><span class="symbol">.</span><span class="function">charAt</span><span class="symbol">((</span><span class="normal">bytes</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x0F</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2017, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Fri Oct 20 12:50:46 EDT 2017.
+</small></address>
+
+</html>

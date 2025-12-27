@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Extense_Library">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Extense_Library/algs4 - Copy.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Extense_Library/algs4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Extense_Library/algs4 - Copy (2).jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>QuickFindUF.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="QuickFindUF code in Java">
+<meta NAME="TITLE" CONTENT="QuickFindUF code in Java">
+<meta NAME="KEYWORDS" CONTENT="QuickFindUF,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>QuickFindUF.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "QuickFindUF.java">QuickFindUF.java</a>
+from <a href = "https://algs4.cs.princeton.edu/15uf">&#167;1.5 Case Study: Union-Find</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac QuickFindUF.java</span>
+<span class="comment"> *  Execution:  java QuickFindUF &lt; input.txt</span>
+<span class="comment"> *  Dependencies: StdIn.java StdOut.java</span>
+<span class="comment"> *  Data files:   </span><span class="url">https://algs4.cs.princeton.edu/15uf/tinyUF.txt</span>
+<span class="comment"> *                </span><span class="url">https://algs4.cs.princeton.edu/15uf/mediumUF.txt</span>
+<span class="comment"> *                </span><span class="url">https://algs4.cs.princeton.edu/15uf/largeUF.txt</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Quick-find algorithm.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  The {</span><span class="type">@code</span><span class="comment"> QuickFindUF} class represents a </span><span class="keyword">&lt;em&gt;</span><span class="comment">union–find data type</span><span class="keyword">&lt;/em&gt;</span>
+<span class="comment"> *  (also known as the </span><span class="keyword">&lt;em&gt;</span><span class="comment">disjoint-sets data type</span><span class="keyword">&lt;/em&gt;</span><span class="comment">).</span>
+<span class="comment"> *  It supports the classic </span><span class="keyword">&lt;em&gt;</span><span class="comment">union</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> and </span><span class="keyword">&lt;em&gt;</span><span class="comment">find</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> operations,</span>
+<span class="comment"> *  along with a </span><span class="keyword">&lt;em&gt;</span><span class="comment">count</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> operation that returns the total number</span>
+<span class="comment"> *  of sets.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  The union–find data type models a collection of sets containing</span>
+<span class="comment"> *  </span><span class="keyword">&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> elements, with each element in exactly one set.</span>
+<span class="comment"> *  The elements are named 0 through </span><span class="keyword">&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span><span class="comment">–1.</span>
+<span class="comment"> *  Initially, there are </span><span class="keyword">&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> sets, with each element in its</span>
+<span class="comment"> *  own set. The </span><span class="keyword">&lt;em&gt;</span><span class="comment">canonical element</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> of a set</span>
+<span class="comment"> *  (also known as the </span><span class="keyword">&lt;em&gt;</span><span class="comment">root</span><span class="keyword">&lt;/em&gt;</span><span class="comment">, </span><span class="keyword">&lt;em&gt;</span><span class="comment">identifier</span><span class="keyword">&lt;/em&gt;</span><span class="comment">,</span>
+<span class="comment"> *  </span><span class="keyword">&lt;em&gt;</span><span class="comment">leader</span><span class="keyword">&lt;/em&gt;</span><span class="comment">, or </span><span class="keyword">&lt;em&gt;</span><span class="comment">set representative</span><span class="keyword">&lt;/em&gt;</span><span class="comment">)</span>
+<span class="comment"> *  is one distinguished element in the set. Here is a summary of</span>
+<span class="comment"> *  the operations:</span>
+<span class="comment"> *  </span><span class="keyword">&lt;ul&gt;</span>
+<span class="comment"> *  </span><span class="keyword">&lt;li&gt;&lt;em&gt;</span><span class="comment">find</span><span class="keyword">&lt;/em&gt;</span><span class="comment">(</span><span class="keyword">&lt;em&gt;</span><span class="comment">p</span><span class="keyword">&lt;/em&gt;</span><span class="comment">) returns the canonical element</span>
+<span class="comment"> *      of the set containing </span><span class="keyword">&lt;em&gt;</span><span class="comment">p</span><span class="keyword">&lt;/em&gt;</span><span class="comment">. The </span><span class="keyword">&lt;em&gt;</span><span class="comment">find</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> operation</span>
+<span class="comment"> *      returns the same value for two elements if and only if</span>
+<span class="comment"> *      they are in the same set.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;li&gt;&lt;em&gt;</span><span class="comment">union</span><span class="keyword">&lt;/em&gt;</span><span class="comment">(</span><span class="keyword">&lt;em&gt;</span><span class="comment">p</span><span class="keyword">&lt;/em&gt;</span><span class="comment">, </span><span class="keyword">&lt;em&gt;</span><span class="comment">q</span><span class="keyword">&lt;/em&gt;</span><span class="comment">) merges the set</span>
+<span class="comment"> *      containing element </span><span class="keyword">&lt;em&gt;</span><span class="comment">p</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> with the set containing</span>
+<span class="comment"> *      element </span><span class="keyword">&lt;em&gt;</span><span class="comment">q</span><span class="keyword">&lt;/em&gt;</span><span class="comment">. That is, if </span><span class="keyword">&lt;em&gt;</span><span class="comment">p</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> and </span><span class="keyword">&lt;em&gt;</span><span class="comment">q</span><span class="keyword">&lt;/em&gt;</span>
+<span class="comment"> *      are in different sets, replace these two sets</span>
+<span class="comment"> *      with a new set that is the union of the two.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;li&gt;&lt;em&gt;</span><span class="comment">count</span><span class="keyword">&lt;/em&gt;</span><span class="comment">() returns the number of sets.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;/ul&gt;</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  The canonical element of a set can change only when the set</span>
+<span class="comment"> *  itself changes during a call to </span><span class="keyword">&lt;em&gt;</span><span class="comment">union</span><span class="keyword">&lt;/em&gt;</span><span class="preproc">&amp;mdash;</span><span class="comment">it cannot</span>
+<span class="comment"> *  change during a call to either </span><span class="keyword">&lt;em&gt;</span><span class="comment">find</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> or </span><span class="keyword">&lt;em&gt;</span><span class="comment">count</span><span class="keyword">&lt;/em&gt;</span><span class="comment">.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  This implementation uses </span><span class="keyword">&lt;em&gt;</span><span class="comment">quick find</span><span class="keyword">&lt;/em&gt;</span><span class="comment">.</span>
+<span class="comment"> *  The constructor takes </span><span class="preproc">&amp;Theta;</span><span class="comment">(</span><span class="keyword">&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span><span class="comment">) time, where </span><span class="keyword">&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span>
+<span class="comment"> *  is the number of sites.</span>
+<span class="comment"> *  The </span><span class="keyword">&lt;em&gt;</span><span class="comment">find</span><span class="keyword">&lt;/em&gt;</span><span class="comment">, </span><span class="keyword">&lt;em&gt;</span><span class="comment">connected</span><span class="keyword">&lt;/em&gt;</span><span class="comment">, and </span><span class="keyword">&lt;em&gt;</span><span class="comment">count</span><span class="keyword">&lt;/em&gt;</span>
+<span class="comment"> *  operations take </span><span class="preproc">&amp;Theta;</span><span class="comment">(1) time; the </span><span class="keyword">&lt;em&gt;</span><span class="comment">union</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> operation</span>
+<span class="comment"> *  takes </span><span class="preproc">&amp;Theta;</span><span class="comment">(</span><span class="keyword">&lt;em&gt;</span><span class="comment">n</span><span class="keyword">&lt;/em&gt;</span><span class="comment">) time.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  For alternative implementations of the same API, see</span>
+<span class="comment"> *  {</span><span class="type">@link</span><span class="comment"> UF}, {</span><span class="type">@link</span><span class="comment"> QuickUnionUF}, and {</span><span class="type">@link</span><span class="comment"> WeightedQuickUnionUF}.</span>
+<span class="comment"> *  For additional documentation, see</span>
+<span class="comment"> *  </span><span class="keyword">&lt;a</span><span class="normal"> </span><span class="type">href</span><span class="symbol">=</span><span class="string">"https://algs4.cs.princeton.edu/15uf"</span><span class="keyword">&gt;</span><span class="comment">Section 1.5</span><span class="keyword">&lt;/a&gt;</span><span class="comment"> of</span>
+<span class="comment"> *  </span><span class="keyword">&lt;i&gt;</span><span class="comment">Algorithms, 4th Edition</span><span class="keyword">&lt;/i&gt;</span><span class="comment"> by Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">QuickFindUF</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> id</span><span class="symbol">;</span><span class="normal">    </span><span class="comment">// id[i] = component identifier of i</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> count</span><span class="symbol">;</span><span class="normal">   </span><span class="comment">// number of components</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Initializes an empty union-find data structure with</span>
+<span class="comment">     * {</span><span class="type">@code</span><span class="comment"> n} elements {</span><span class="type">@code</span><span class="comment"> 0} through {</span><span class="type">@code</span><span class="comment"> n-1}.</span>
+<span class="comment">     * Initially, each element is in its own set.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  n the number of elements</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException if {</span><span class="type">@code</span><span class="comment"> n &lt; 0}</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">QuickFindUF</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> n</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        count </span><span class="symbol">=</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="normal">        id </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">int</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            id</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the number of sets.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the number of sets (between {</span><span class="type">@code</span><span class="comment"> 1} and {</span><span class="type">@code</span><span class="comment"> n})</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">count</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> count</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns the canonical element of the set containing element {</span><span class="type">@code</span><span class="comment"> p}.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  p an element</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> the canonical element of the set containing {</span><span class="type">@code</span><span class="comment"> p}</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless {</span><span class="type">@code</span><span class="comment"> 0 &lt;= p &lt; n}</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">find</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> p</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">validate</span><span class="symbol">(</span><span class="normal">p</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> id</span><span class="symbol">[</span><span class="normal">p</span><span class="symbol">];</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// validate that p is a valid index</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">validate</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> p</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> id</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">p </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> p </span><span class="symbol">&gt;=</span><span class="normal"> n</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"index "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> p </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" is not between 0 and "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns true if the two elements are in the same set.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  p one element</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  q the other element</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> {</span><span class="type">@code</span><span class="comment"> true} if {</span><span class="type">@code</span><span class="comment"> p} and {</span><span class="type">@code</span><span class="comment"> q} are in the same set;</span>
+<span class="comment">     *         {</span><span class="type">@code</span><span class="comment"> false} otherwise</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless</span>
+<span class="comment">     *         both {</span><span class="type">@code</span><span class="comment"> 0 &lt;= p &lt; n} and {</span><span class="type">@code</span><span class="comment"> 0 &lt;= q &lt; n}</span>
+<span class="comment">     * </span><span class="type">@deprecated</span><span class="comment"> Replace with two calls to {</span><span class="type">@link</span><span class="comment"> #find(int)}.</span>
+<span class="comment">     */</span>
+<span class="normal">    @Deprecated</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">connected</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> p</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> q</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">validate</span><span class="symbol">(</span><span class="normal">p</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="function">validate</span><span class="symbol">(</span><span class="normal">q</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> id</span><span class="symbol">[</span><span class="normal">p</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> id</span><span class="symbol">[</span><span class="normal">q</span><span class="symbol">];</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Merges the set containing element {</span><span class="type">@code</span><span class="comment"> p} with the set</span>
+<span class="comment">     * containing element {</span><span class="type">@code</span><span class="comment"> q}.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  p one element</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment">  q the other element</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless</span>
+<span class="comment">     *         both {</span><span class="type">@code</span><span class="comment"> 0 &lt;= p &lt; n} and {</span><span class="type">@code</span><span class="comment"> 0 &lt;= q &lt; n}</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">union</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> p</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> q</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">validate</span><span class="symbol">(</span><span class="normal">p</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="function">validate</span><span class="symbol">(</span><span class="normal">q</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> pID </span><span class="symbol">=</span><span class="normal"> id</span><span class="symbol">[</span><span class="normal">p</span><span class="symbol">];</span><span class="normal">   </span><span class="comment">// needed for correctness</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> qID </span><span class="symbol">=</span><span class="normal"> id</span><span class="symbol">[</span><span class="normal">q</span><span class="symbol">];</span><span class="normal">   </span><span class="comment">// to reduce the number of array accesses</span>
+
+<span class="normal">        </span><span class="comment">// p and q are already in the same component</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">pID </span><span class="symbol">==</span><span class="normal"> qID</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="symbol">;</span>
+
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> id</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">id</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> pID</span><span class="symbol">)</span><span class="normal"> id</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> qID</span><span class="symbol">;</span>
+<span class="normal">        count</span><span class="symbol">--;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Reads an integer {</span><span class="type">@code</span><span class="comment"> n} and a sequence of pairs of integers</span>
+<span class="comment">     * (between {</span><span class="type">@code</span><span class="comment"> 0} and {</span><span class="type">@code</span><span class="comment"> n-1}) from standard input, where each integer</span>
+<span class="comment">     * in the pair represents some element;</span>
+<span class="comment">     * if the elements are in different sets, merge the two sets</span>
+<span class="comment">     * and print the pair to standard output.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> args the command-line arguments</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readInt</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="usertype">QuickFindUF</span><span class="normal"> uf </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">QuickFindUF</span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">StdIn</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> p </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readInt</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> q </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readInt</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">uf</span><span class="symbol">.</span><span class="function">find</span><span class="symbol">(</span><span class="normal">p</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> uf</span><span class="symbol">.</span><span class="function">find</span><span class="symbol">(</span><span class="normal">q</span><span class="symbol">))</span><span class="normal"> </span><span class="keyword">continue</span><span class="symbol">;</span>
+<span class="normal">            uf</span><span class="symbol">.</span><span class="function">union</span><span class="symbol">(</span><span class="normal">p</span><span class="symbol">,</span><span class="normal"> q</span><span class="symbol">);</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">p </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> q</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">uf</span><span class="symbol">.</span><span class="function">count</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" components"</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2022, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Sat Nov 26 14:06:16 EST 2022.
+</small></address>
+
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>SplayBST.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="SplayBST code in Java">
+<meta NAME="TITLE" CONTENT="SplayBST code in Java">
+<meta NAME="KEYWORDS" CONTENT="SplayBST,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>SplayBST.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "SplayBST.java">SplayBST.java</a>
+from <a href = "https://algs4.cs.princeton.edu/33balanced">&#167;3.3 Balanced Search Trees</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac SplayBST.java</span>
+<span class="comment"> *  Execution:    java SplayBST</span>
+<span class="comment"> *  Dependencies: none</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Splay tree. Supports splay-insert, -search, and -delete.</span>
+<span class="comment"> *  Splays on every operation, regardless of the presence of the associated</span>
+<span class="comment"> *  key prior to that operation.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Written by Josh Israel.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">SplayBST</span><span class="symbol">&lt;</span><span class="normal">Key </span><span class="usertype">extends</span><span class="normal"> Comparable</span><span class="symbol">&lt;</span><span class="normal">Key</span><span class="symbol">&gt;,</span><span class="normal"> Value</span><span class="symbol">&gt;</span><span class="normal">  </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Node</span><span class="normal"> root</span><span class="symbol">;</span><span class="normal">   </span><span class="comment">// root of the BST</span>
+
+<span class="normal">    </span><span class="comment">// BST helper node data type</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">Node</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Key</span><span class="normal"> key</span><span class="symbol">;</span><span class="normal">            </span><span class="comment">// key</span>
+<span class="normal">        </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Value</span><span class="normal"> value</span><span class="symbol">;</span><span class="normal">        </span><span class="comment">// associated data</span>
+<span class="normal">        </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Node</span><span class="normal"> left</span><span class="symbol">,</span><span class="normal"> right</span><span class="symbol">;</span><span class="normal">   </span><span class="comment">// left and right subtrees</span>
+
+<span class="normal">        </span><span class="keyword">public</span><span class="normal"> </span><span class="function">Node</span><span class="symbol">(</span><span class="usertype">Key</span><span class="normal"> key</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">Value</span><span class="normal"> value</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">key   </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">value </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">contains</span><span class="symbol">(</span><span class="usertype">Key</span><span class="normal"> key</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="function">get</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// return value associated with the given key</span>
+<span class="normal">    </span><span class="comment">// if no such value, return null</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Value</span><span class="normal"> </span><span class="function">get</span><span class="symbol">(</span><span class="usertype">Key</span><span class="normal"> key</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        root </span><span class="symbol">=</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> cmp </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> root</span><span class="symbol">.</span><span class="normal">value</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">else</span><span class="normal">          </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/***************************************************************************</span>
+<span class="comment">    *  Splay tree insertion.</span>
+<span class="comment">    ***************************************************************************/</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">put</span><span class="symbol">(</span><span class="usertype">Key</span><span class="normal"> key</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">Value</span><span class="normal"> value</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="comment">// splay key to root</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">root </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            root </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Node</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">,</span><span class="normal"> value</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        root </span><span class="symbol">=</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="type">int</span><span class="normal"> cmp </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// Insert new node at root</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">Node</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Node</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">,</span><span class="normal"> value</span><span class="symbol">);</span>
+<span class="normal">            n</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">=</span><span class="normal"> root</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">;</span>
+<span class="normal">            n</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> root</span><span class="symbol">;</span>
+<span class="normal">            root</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+<span class="normal">            root </span><span class="symbol">=</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// Insert new node at root</span>
+<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">Node</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Node</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">,</span><span class="normal"> value</span><span class="symbol">);</span>
+<span class="normal">            n</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> root</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">;</span>
+<span class="normal">            n</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">=</span><span class="normal"> root</span><span class="symbol">;</span>
+<span class="normal">            root</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+<span class="normal">            root </span><span class="symbol">=</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// It was a duplicate key. Simply replace the value</span>
+<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            root</span><span class="symbol">.</span><span class="normal">value </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">   </span><span class="comment">/***************************************************************************</span>
+<span class="comment">    *  Splay tree deletion.</span>
+<span class="comment">    ***************************************************************************/</span>
+<span class="normal">    </span><span class="comment">/* This splays the key, then does a slightly modified Hibbard deletion on</span>
+<span class="comment">     * the root (if it is the node to be deleted; if it is not, the key was</span>
+<span class="comment">     * not in the tree). The modification is that rather than swapping the</span>
+<span class="comment">     * root (call it node A) with its successor, it's successor (call it Node B)</span>
+<span class="comment">     * is moved to the root position by splaying for the deletion key in A's</span>
+<span class="comment">     * right subtree. Finally, A's right child is made the new root's right</span>
+<span class="comment">     * child.</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">remove</span><span class="symbol">(</span><span class="usertype">Key</span><span class="normal"> key</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">root </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="symbol">;</span><span class="normal"> </span><span class="comment">// empty tree</span>
+
+<span class="normal">        root </span><span class="symbol">=</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="type">int</span><span class="normal"> cmp </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                root </span><span class="symbol">=</span><span class="normal"> root</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">Node</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> root</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">;</span>
+<span class="normal">                root </span><span class="symbol">=</span><span class="normal"> root</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">;</span>
+<span class="normal">                </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+<span class="normal">                root</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// else: it wasn't in the tree to remove</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/***************************************************************************</span>
+<span class="comment">    * Splay tree function.</span>
+<span class="comment">    * **********************************************************************/</span>
+<span class="normal">    </span><span class="comment">// splay key in the tree rooted at Node h. If a node with that key exists,</span>
+<span class="normal">    </span><span class="comment">//   it is splayed to the root of the tree. If it does not, the last node</span>
+<span class="normal">    </span><span class="comment">//   along the search path for the key is splayed to the root.</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Node</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="usertype">Node</span><span class="normal"> h</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">Key</span><span class="normal"> key</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">h </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+
+<span class="normal">        </span><span class="type">int</span><span class="normal"> cmp1 </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp1 </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="comment">// key not in tree, so we're done</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="keyword">return</span><span class="normal"> h</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> cmp2 </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp2 </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">=</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+<span class="normal">                h </span><span class="symbol">=</span><span class="normal"> </span><span class="function">rotateRight</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp2 </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span>
+<span class="normal">                    h</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">=</span><span class="normal"> </span><span class="function">rotateLeft</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> h</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal">                </span><span class="keyword">return</span><span class="normal"> </span><span class="function">rotateRight</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp1 </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="comment">// key not in tree, so we're done</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="keyword">return</span><span class="normal"> h</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="type">int</span><span class="normal"> cmp2 </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp2 </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">.</span><span class="normal">left  </span><span class="symbol">=</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span>
+<span class="normal">                    h</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> </span><span class="function">rotateRight</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cmp2 </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> </span><span class="function">splay</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">,</span><span class="normal"> key</span><span class="symbol">);</span>
+<span class="normal">                h </span><span class="symbol">=</span><span class="normal"> </span><span class="function">rotateLeft</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> h</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal">                 </span><span class="keyword">return</span><span class="normal"> </span><span class="function">rotateLeft</span><span class="symbol">(</span><span class="normal">h</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> h</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">   </span><span class="comment">/***************************************************************************</span>
+<span class="comment">    *  Helper functions.</span>
+<span class="comment">    ***************************************************************************/</span>
+
+<span class="normal">    </span><span class="comment">// height of tree (1-node tree has height 0)</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">height</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="function">height</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">);</span><span class="normal"> </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">height</span><span class="symbol">(</span><span class="usertype">Node</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">max</span><span class="symbol">(</span><span class="function">height</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">),</span><span class="normal"> </span><span class="function">height</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">size</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="function">size</span><span class="symbol">(</span><span class="normal">root</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">size</span><span class="symbol">(</span><span class="usertype">Node</span><span class="normal"> x</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">x </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="function">size</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="function">size</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// right rotate</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Node</span><span class="normal"> </span><span class="function">rotateRight</span><span class="symbol">(</span><span class="usertype">Node</span><span class="normal"> h</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Node</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> h</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">;</span>
+<span class="normal">        h</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">;</span>
+<span class="normal">        x</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> h</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// left rotate</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Node</span><span class="normal"> </span><span class="function">rotateLeft</span><span class="symbol">(</span><span class="usertype">Node</span><span class="normal"> h</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Node</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> h</span><span class="symbol">.</span><span class="normal">right</span><span class="symbol">;</span>
+<span class="normal">        h</span><span class="symbol">.</span><span class="normal">right </span><span class="symbol">=</span><span class="normal"> x</span><span class="symbol">.</span><span class="normal">left</span><span class="symbol">;</span>
+<span class="normal">        x</span><span class="symbol">.</span><span class="normal">left </span><span class="symbol">=</span><span class="normal"> h</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// test client</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">SplayBST&lt;Integer, Integer&gt;</span><span class="normal"> st1 </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> SplayBST</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">,</span><span class="normal"> Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">        st1</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="number">5</span><span class="symbol">,</span><span class="normal"> </span><span class="number">5</span><span class="symbol">);</span>
+<span class="normal">        st1</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="number">9</span><span class="symbol">,</span><span class="normal"> </span><span class="number">9</span><span class="symbol">);</span>
+<span class="normal">        st1</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="number">13</span><span class="symbol">,</span><span class="normal"> </span><span class="number">13</span><span class="symbol">);</span>
+<span class="normal">        st1</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="number">11</span><span class="symbol">,</span><span class="normal"> </span><span class="number">11</span><span class="symbol">);</span>
+<span class="normal">        st1</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+
+
+<span class="normal">        </span><span class="usertype">SplayBST&lt;String, String&gt;</span><span class="normal"> st </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> SplayBST</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">,</span><span class="normal"> String</span><span class="symbol">&gt;();</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"www.cs.princeton.edu"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"128.112.136.11"</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"www.cs.princeton.edu"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"128.112.136.12"</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"www.cs.princeton.edu"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"128.112.136.13"</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"www.princeton.edu"</span><span class="symbol">,</span><span class="normal">    </span><span class="string">"128.112.128.15"</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"www.yale.edu"</span><span class="symbol">,</span><span class="normal">         </span><span class="string">"130.132.143.21"</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"www.simpsons.com"</span><span class="symbol">,</span><span class="normal">     </span><span class="string">"209.052.165.60"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"The size 0 is: "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="string">"www.yale.edu"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"The size 1 is: "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="string">"www.princeton.edu"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"The size 2 is: "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="string">"non-member"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"The size 3 is: "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="string">"www.cs.princeton.edu"</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"The size 4 is: "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="string">"www.yale.com"</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"The size 5 is: "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="string">"www.simpsons.com"</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"The size 6 is: "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">());</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:13:53 EDT 2022.
+</small></address>
+
+</html>

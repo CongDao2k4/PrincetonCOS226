@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>California.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="California code in Java">
+<meta NAME="TITLE" CONTENT="California code in Java">
+<meta NAME="KEYWORDS" CONTENT="California,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>California.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "California.java">California.java</a>
+from <a href = "https://algs4.cs.princeton.edu/25applications">&#167;2.5 Sorting Applications</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac California.java</span>
+<span class="comment"> *  Execution:    java California</span>
+<span class="comment"> *  Dependencies: StdOut.java StdIn.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Sort names according to alphabet used in California runoff election.</span>
+<span class="comment"> *</span>
+<span class="comment"> *      R W Q O J M V A H B S G Z X N T C I E K U P D Y F L</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Treats other characters as less than any uppercase letter</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java California &lt; california-gov.txt</span>
+<span class="comment"> *  ROBERT "BUTCH" DOLE</span>
+<span class="comment"> *  ROBERT C. MANNHEIM</span>
+<span class="comment"> *  ROBERT C. NEWMAN II</span>
+<span class="comment"> *  ROBERT CULLENBINE</span>
+<span class="comment"> *  RONALD J. FRIEDMAN</span>
+<span class="comment"> *  RONALD JASON PALMIERI</span>
+<span class="comment"> *  RANDALL D. SPRAGUE</span>
+<span class="comment"> *  RALPH A. HERNANDEZ</span>
+<span class="comment"> *  RICH GOSSE</span>
+<span class="comment"> *  RICHARD J. SIMMONS</span>
+<span class="comment"> *  REVA RENEE RENZ</span>
+<span class="comment"> *  WARREN FARRELL</span>
+<span class="comment"> *  WILLIAM "BILL" S. CHAMBERS</span>
+<span class="comment"> *  ...</span>
+<span class="comment"> *  LAWRENCE STEVEN STRAUSS</span>
+<span class="comment"> *  LINGEL H. WINTERS</span>
+<span class="comment"> *  LEO GALLAGHER</span>
+<span class="comment"> *  LEONARD PADILLA</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Data file:  </span><span class="url">https://algs4.cs.princeton.edu/35applications/california-gov.txt</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">Arrays</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">Comparator</span><span class="symbol">;</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">California</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="keyword">final</span><span class="normal"> </span><span class="usertype">Comparator&lt;String&gt;</span><span class="normal"> CANDIDATE_ORDER </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">CandidateComparator</span><span class="symbol">();</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">CandidateComparator</span><span class="normal"> </span><span class="keyword">implements</span><span class="normal"> Comparator</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">&gt;</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> order </span><span class="symbol">=</span><span class="normal"> </span><span class="string">"RWQOJMVAHBSGZXNTCIEKUPDYFL"</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">compare</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> a</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> b</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">min</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="function">length</span><span class="symbol">(),</span><span class="normal"> b</span><span class="symbol">.</span><span class="function">length</span><span class="symbol">());</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="type">int</span><span class="normal"> aindex </span><span class="symbol">=</span><span class="normal"> order</span><span class="symbol">.</span><span class="function">indexOf</span><span class="symbol">(</span><span class="normal">a</span><span class="symbol">.</span><span class="function">charAt</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">));</span>
+<span class="normal">                </span><span class="type">int</span><span class="normal"> bindex </span><span class="symbol">=</span><span class="normal"> order</span><span class="symbol">.</span><span class="function">indexOf</span><span class="symbol">(</span><span class="normal">b</span><span class="symbol">.</span><span class="function">charAt</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">));</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal">      </span><span class="symbol">(</span><span class="normal">aindex </span><span class="symbol">&lt;</span><span class="normal"> bindex</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">aindex </span><span class="symbol">&gt;</span><span class="normal"> bindex</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">+</span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="normal"> a</span><span class="symbol">.</span><span class="function">length</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> b</span><span class="symbol">.</span><span class="function">length</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+
+<span class="normal">    </span><span class="comment">// test client</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        String</span><span class="symbol">[]</span><span class="normal"> candidates </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readAll</span><span class="symbol">().</span><span class="function">toUpperCase</span><span class="symbol">().</span><span class="function">split</span><span class="symbol">(</span><span class="string">"</span><span class="specialchar">\\</span><span class="string">n+"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> candidates</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        Arrays</span><span class="symbol">.</span><span class="function">sort</span><span class="symbol">(</span><span class="normal">candidates</span><span class="symbol">,</span><span class="normal"> California</span><span class="symbol">.</span><span class="normal">CANDIDATE_ORDER</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">candidates</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:08:22 EDT 2022.
+</small></address>
+
+</html>

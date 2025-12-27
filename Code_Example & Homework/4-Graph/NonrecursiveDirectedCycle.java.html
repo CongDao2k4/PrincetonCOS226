@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>NonrecursiveDirectedCycle.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="NonrecursiveDirectedCycle code in Java">
+<meta NAME="TITLE" CONTENT="NonrecursiveDirectedCycle code in Java">
+<meta NAME="KEYWORDS" CONTENT="NonrecursiveDirectedCycle,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>NonrecursiveDirectedCycle.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "NonrecursiveDirectedCycle.java">NonrecursiveDirectedCycle.java</a>
+from <a href = "https://algs4.cs.princeton.edu/42digraph">&#167;4.2 Directed Graphs</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac NonrecursiveDirectedCycle.java</span>
+<span class="comment"> *  Execution:    java NonrecursiveDirectedCycle input.txt</span>
+<span class="comment"> *  Dependencies: Digraph.java Stack.java StdOut.java In.java</span>
+<span class="comment"> *  Data files:   </span><span class="url">https://algs4.cs.princeton.edu/42digraph/tinyDG.txt</span>
+<span class="comment"> *                </span><span class="url">https://algs4.cs.princeton.edu/42digraph/tinyDAG.txt</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Finds a directed cycle in a digraph using nonrecursive DFS.</span>
+<span class="comment"> *  Runs in O(E + V) time.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java NonrecursiveDirectedCycle tinyDG.txt</span>
+<span class="comment"> *  Directed cycle: 3 5 4 3</span>
+<span class="comment"> *</span>
+<span class="comment"> *  %  java NonrecursiveDirectedCycle tinyDAG.txt</span>
+<span class="comment"> *  No directed cycle</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">Iterator</span><span class="symbol">;</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  The {</span><span class="type">@code</span><span class="comment"> NonrecursiveDirectedCycle} class represents a data type for</span>
+<span class="comment"> *  determining whether a digraph has a directed cycle.</span>
+<span class="comment"> *  The </span><span class="keyword">&lt;em&gt;</span><span class="comment">hasCycle</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> operation determines whether the digraph has</span>
+<span class="comment"> *  a directed cycle and, and of so, the </span><span class="keyword">&lt;em&gt;</span><span class="comment">cycle</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> operation</span>
+<span class="comment"> *  returns one.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  This implementation uses a nonrecursive depth-first search.</span>
+<span class="comment"> *  The constructor takes time proportional to </span><span class="keyword">&lt;em&gt;</span><span class="comment">V</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> + </span><span class="keyword">&lt;em&gt;</span><span class="comment">E</span><span class="keyword">&lt;/em&gt;</span>
+<span class="comment"> *  (in the worst case), where </span><span class="keyword">&lt;em&gt;</span><span class="comment">V</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> is the number of vertices</span>
+<span class="comment"> *  and </span><span class="keyword">&lt;em&gt;</span><span class="comment">E</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> is the number of edges.</span>
+<span class="comment"> *  Each instance method takes </span><span class="preproc">&amp;Theta;</span><span class="comment">(1) time.</span>
+<span class="comment"> *  It uses </span><span class="preproc">&amp;Theta;</span><span class="comment">(</span><span class="keyword">&lt;em&gt;</span><span class="comment">V</span><span class="keyword">&lt;/em&gt;</span><span class="comment">) extra space (not including the digraph).</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  See {</span><span class="type">@link</span><span class="comment"> NonrecursiveTopological} to compute a topological order if the</span>
+<span class="comment"> *  digraph is acyclic.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  For additional documentation,</span>
+<span class="comment"> *  see </span><span class="keyword">&lt;a</span><span class="normal"> </span><span class="type">href</span><span class="symbol">=</span><span class="string">"https://algs4.cs.princeton.edu/42digraph"</span><span class="keyword">&gt;</span><span class="comment">Section 4.2</span><span class="keyword">&lt;/a&gt;</span><span class="comment"> of</span>
+<span class="comment"> *  </span><span class="keyword">&lt;i&gt;</span><span class="comment">Algorithms, 4th Edition</span><span class="keyword">&lt;/i&gt;</span><span class="comment"> by Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">NonrecursiveDirectedCycle</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">Stack&lt;Integer&gt;</span><span class="normal"> cycle</span><span class="symbol">;</span><span class="normal">    </span><span class="comment">// directed cycle (or null if no such cycle)</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Determines whether the digraph {</span><span class="type">@code</span><span class="comment"> G} has a directed cycle and, if so,</span>
+<span class="comment">     * finds such a cycle.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> G the digraph</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">NonrecursiveDirectedCycle</span><span class="symbol">(</span><span class="usertype">Digraph</span><span class="normal"> G</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> edgeTo </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">int</span><span class="symbol">[</span><span class="normal">G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">()];</span><span class="normal">            </span><span class="comment">// edgeTo[v] = previous vertex on path to v</span>
+<span class="normal">        </span><span class="type">boolean</span><span class="symbol">[]</span><span class="normal"> marked </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">boolean</span><span class="symbol">[</span><span class="normal">G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">()];</span><span class="normal">    </span><span class="comment">// marked[v] = has vertex v been marked?</span>
+<span class="normal">        </span><span class="type">boolean</span><span class="symbol">[]</span><span class="normal"> onStack </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">boolean</span><span class="symbol">[</span><span class="normal">G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">()];</span><span class="normal">   </span><span class="comment">// onStack[v] = is vertex on the stack?</span>
+<span class="normal">        </span><span class="usertype">Stack&lt;Integer&gt;</span><span class="normal"> stack </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Stack</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;();</span>
+
+<span class="normal">        </span><span class="comment">// to be able to iterate over each adjacency list, keeping track of which</span>
+<span class="normal">        </span><span class="comment">// vertex in each adjacency list needs to be explored next</span>
+<span class="normal">        Iterator</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;[]</span><span class="normal"> adj </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Iterator</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;[])</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Iterator</span><span class="symbol">[</span><span class="normal">G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">()];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> v</span><span class="symbol">++)</span>
+<span class="normal">            adj</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">adj</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">).</span><span class="function">iterator</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> s </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> s </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> s</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">marked</span><span class="symbol">[</span><span class="normal">s</span><span class="symbol">])</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                onStack</span><span class="symbol">[</span><span class="normal">s</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">                marked</span><span class="symbol">[</span><span class="normal">s</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">                stack</span><span class="symbol">.</span><span class="function">push</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">stack</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                    </span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> stack</span><span class="symbol">.</span><span class="function">peek</span><span class="symbol">();</span>
+<span class="normal">                    </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">adj</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">].</span><span class="function">hasNext</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                        </span><span class="type">int</span><span class="normal"> w </span><span class="symbol">=</span><span class="normal"> adj</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">].</span><span class="function">next</span><span class="symbol">();</span>
+<span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">marked</span><span class="symbol">[</span><span class="normal">w</span><span class="symbol">])</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                            </span><span class="comment">// discovered vertex w for the first time</span>
+<span class="normal">                            marked</span><span class="symbol">[</span><span class="normal">w</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">                            edgeTo</span><span class="symbol">[</span><span class="normal">w</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> v</span><span class="symbol">;</span>
+<span class="normal">                            stack</span><span class="symbol">.</span><span class="function">push</span><span class="symbol">(</span><span class="normal">w</span><span class="symbol">);</span>
+<span class="normal">                            onStack</span><span class="symbol">[</span><span class="normal">w</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">                        </span><span class="cbracket">}</span>
+<span class="normal">                        </span><span class="comment">// trace back directed cycle</span>
+<span class="normal">                        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">onStack</span><span class="symbol">[</span><span class="normal">w</span><span class="symbol">])</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                            cycle </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Stack</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">                            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> v</span><span class="symbol">;</span><span class="normal"> x </span><span class="symbol">!=</span><span class="normal"> w</span><span class="symbol">;</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> edgeTo</span><span class="symbol">[</span><span class="normal">x</span><span class="symbol">])</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                                cycle</span><span class="symbol">.</span><span class="function">push</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">);</span>
+<span class="normal">                            </span><span class="cbracket">}</span>
+<span class="normal">                            cycle</span><span class="symbol">.</span><span class="function">push</span><span class="symbol">(</span><span class="normal">w</span><span class="symbol">);</span>
+<span class="normal">                            cycle</span><span class="symbol">.</span><span class="function">push</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">);</span>
+<span class="normal">                            </span><span class="keyword">assert</span><span class="normal"> </span><span class="function">check</span><span class="symbol">();</span>
+<span class="normal">                            </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="normal">                        </span><span class="cbracket">}</span>
+<span class="normal">                    </span><span class="cbracket">}</span>
+<span class="normal">                    </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                        </span><span class="comment">// v's adjacency list is exhausted</span>
+<span class="normal">                        </span><span class="type">int</span><span class="normal"> vCopy </span><span class="symbol">=</span><span class="normal"> stack</span><span class="symbol">.</span><span class="function">pop</span><span class="symbol">();</span>
+<span class="normal">                        </span><span class="keyword">assert</span><span class="normal"> v </span><span class="symbol">==</span><span class="normal"> vCopy</span><span class="symbol">;</span>
+<span class="normal">                        onStack</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">false</span><span class="symbol">;</span>
+<span class="normal">                    </span><span class="cbracket">}</span>
+<span class="normal">                </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Does the digraph have a directed cycle?</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> {</span><span class="type">@code</span><span class="comment"> true} if the digraph has a directed cycle, {</span><span class="type">@code</span><span class="comment"> false} otherwise</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">hasCycle</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> cycle </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Returns a directed cycle if the digraph has a directed cycle, and {</span><span class="type">@code</span><span class="comment"> null} otherwise.</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> a directed cycle (as an iterable) if the digraph has a directed cycle,</span>
+<span class="comment">     *    and {</span><span class="type">@code</span><span class="comment"> null} otherwise</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">Iterable&lt;Integer&gt;</span><span class="normal"> </span><span class="function">cycle</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> cycle</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">    </span><span class="comment">// certify that digraph has a directed cycle if it reports one</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">check</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">hasCycle</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="comment">// verify cycle</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> first </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> last </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">:</span><span class="normal"> </span><span class="function">cycle</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">first </span><span class="symbol">==</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">)</span><span class="normal"> first </span><span class="symbol">=</span><span class="normal"> v</span><span class="symbol">;</span>
+<span class="normal">                last </span><span class="symbol">=</span><span class="normal"> v</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">first </span><span class="symbol">!=</span><span class="normal"> last</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                System</span><span class="symbol">.</span><span class="normal">err</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"cycle begins with %d and ends with %d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> first</span><span class="symbol">,</span><span class="normal"> last</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">false</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Unit tests the {</span><span class="type">@code</span><span class="comment"> NonrecursiveDirectedCycle} data type.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> args the command-line arguments</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">In</span><span class="normal"> in </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">In</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="usertype">Digraph</span><span class="normal"> G </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Digraph</span><span class="symbol">(</span><span class="normal">in</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="usertype">NonrecursiveDirectedCycle</span><span class="normal"> finder </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">NonrecursiveDirectedCycle</span><span class="symbol">(</span><span class="normal">G</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">finder</span><span class="symbol">.</span><span class="function">hasCycle</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="string">"Directed cycle: "</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">:</span><span class="normal"> finder</span><span class="symbol">.</span><span class="function">cycle</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">v </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"No directed cycle"</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:26:00 EDT 2022.
+</small></address>
+
+</html>

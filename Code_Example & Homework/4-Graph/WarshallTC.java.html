@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>WarshallTC.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="WarshallTC code in Java">
+<meta NAME="TITLE" CONTENT="WarshallTC code in Java">
+<meta NAME="KEYWORDS" CONTENT="WarshallTC,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>WarshallTC.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "WarshallTC.java">WarshallTC.java</a>
+from <a href = "https://algs4.cs.princeton.edu/42digraph">&#167;4.2 Directed Graphs</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac WarshallTC.java</span>
+<span class="comment"> *  Execution:    java  WarshallTC V E</span>
+<span class="comment"> *  Dependencies: AdjMatrixDigraph.java StdOut.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Compute transitive closure of a digraph G and support</span>
+<span class="comment"> *  reachability queries.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Preprocessing time: O(V^3) time.</span>
+<span class="comment"> *  Query time: O(1).</span>
+<span class="comment"> *  Space: O(V^2).</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java WarshallTC 10 20</span>
+<span class="comment"> *  10 20</span>
+<span class="comment"> *  0: 9 2 7 5</span>
+<span class="comment"> *  1: 6 7</span>
+<span class="comment"> *  2:</span>
+<span class="comment"> *  3: 9 9 9 7 6</span>
+<span class="comment"> *  4: 7</span>
+<span class="comment"> *  5: 7</span>
+<span class="comment"> *  6: 7 1</span>
+<span class="comment"> *  7: 2</span>
+<span class="comment"> *  8: 7 6 0</span>
+<span class="comment"> *  9: 2</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Transitive closure</span>
+<span class="comment"> *  -----------------------------------</span>
+<span class="comment"> *         0  1  2  3  4  5  6  7  8  9</span>
+<span class="comment"> *    0:   x     x        x     x     x</span>
+<span class="comment"> *    1:      x  x           x  x</span>
+<span class="comment"> *    2:         x</span>
+<span class="comment"> *    3:      x  x  x        x  x     x</span>
+<span class="comment"> *    4:         x     x        x</span>
+<span class="comment"> *    5:         x        x     x</span>
+<span class="comment"> *    6:      x  x           x  x</span>
+<span class="comment"> *    7:         x              x</span>
+<span class="comment"> *    8:   x  x  x        x  x  x  x  x</span>
+<span class="comment"> *    9:         x                    x</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">WarshallTC</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">boolean</span><span class="symbol">[][]</span><span class="normal"> tc</span><span class="symbol">;</span><span class="normal">    </span><span class="comment">// tc[v][w] = true iff path from v to w</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">WarshallTC</span><span class="symbol">(</span><span class="usertype">AdjMatrixDigraph</span><span class="normal"> G</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">        </span><span class="comment">// initialize tc[][]</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> V </span><span class="symbol">=</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span>
+<span class="normal">        tc </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">boolean</span><span class="symbol">[</span><span class="normal">V</span><span class="symbol">][</span><span class="normal">V</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> V</span><span class="symbol">;</span><span class="normal"> v</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> w </span><span class="symbol">:</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">adj</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                tc</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">][</span><span class="normal">w</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            tc</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">][</span><span class="normal">v</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// Warshall's algorithm</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> V</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> V</span><span class="symbol">;</span><span class="normal"> v</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">tc</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">][</span><span class="normal">i</span><span class="symbol">])</span><span class="normal"> </span><span class="keyword">continue</span><span class="symbol">;</span><span class="normal">        </span><span class="comment">// optimization</span>
+<span class="normal">                </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> w </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> w </span><span class="symbol">&lt;</span><span class="normal"> V</span><span class="symbol">;</span><span class="normal"> w</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                    </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">tc</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">][</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">&amp;&amp;</span><span class="normal"> tc</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">][</span><span class="normal">w</span><span class="symbol">])</span><span class="normal"> tc</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">][</span><span class="normal">w</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">                </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// is there a directed path from v to w?</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">hasPath</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> w</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> tc</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">][</span><span class="normal">w</span><span class="symbol">];</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">    </span><span class="comment">// test client</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> V </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="function">parseInt</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> E </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="function">parseInt</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="usertype">AdjMatrixDigraph</span><span class="normal"> G </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">AdjMatrixDigraph</span><span class="symbol">(</span><span class="normal">V</span><span class="symbol">,</span><span class="normal"> E</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">G</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="usertype">WarshallTC</span><span class="normal"> tc </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">WarshallTC</span><span class="symbol">(</span><span class="normal">G</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// print header</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Transitive closure"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"-----------------------------------"</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="string">"     "</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> v</span><span class="symbol">++)</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"%3d"</span><span class="symbol">,</span><span class="normal"> v</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// print transitive closure</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> v</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"%3d: "</span><span class="symbol">,</span><span class="normal"> v</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> w </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> w </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> w</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">tc</span><span class="symbol">.</span><span class="function">hasPath</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">,</span><span class="normal"> w</span><span class="symbol">))</span><span class="normal"> StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"  x"</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">else</span><span class="normal">                  StdOut</span><span class="symbol">.</span><span class="function">printf</span><span class="symbol">(</span><span class="string">"   "</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:26:00 EDT 2022.
+</small></address>
+
+</html>

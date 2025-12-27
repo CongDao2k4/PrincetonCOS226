@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>IndirectPQ.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="IndirectPQ code in Java">
+<meta NAME="TITLE" CONTENT="IndirectPQ code in Java">
+<meta NAME="KEYWORDS" CONTENT="IndirectPQ,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>IndirectPQ.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "IndirectPQ.java">IndirectPQ.java</a>
+from <a href = "https://algs4.cs.princeton.edu/35applications">&#167;3.5 Searching Applications</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac IndirectPQ.java</span>
+<span class="comment"> *  Execution:    java IndirectPQ</span>
+<span class="comment"> *  Dependencies: none</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Indirect priority queue implementation with Java's TreeSet and</span>
+<span class="comment"> *  HashMap. It assumes the priorities are integers and the values</span>
+<span class="comment"> *  are strings, although it is easily modifiable for Comparable</span>
+<span class="comment"> *  priorities and Object values.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java IndirectPQ</span>
+<span class="comment"> *  this</span>
+<span class="comment"> *  is</span>
+<span class="comment"> *  a</span>
+<span class="comment"> *  test</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Remarks</span>
+<span class="comment"> *  -------</span>
+<span class="comment"> *  All operations are efficient, but it could be improved by using</span>
+<span class="comment"> *  a binary heap instead of the red-black tree.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">HashMap</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">TreeSet</span><span class="symbol">;</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">IndirectPQ</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">TreeSet&lt;Element&gt;</span><span class="normal"> pq </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> TreeSet</span><span class="symbol">&lt;</span><span class="normal">Element</span><span class="symbol">&gt;();</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">HashMap&lt;String, Element&gt;</span><span class="normal"> st </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> HashMap</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">,</span><span class="normal"> Element</span><span class="symbol">&gt;();</span>
+
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">Element</span><span class="normal"> </span><span class="keyword">implements</span><span class="normal"> Comparable</span><span class="symbol">&lt;</span><span class="normal">Element</span><span class="symbol">&gt;</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">private</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> key</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">private</span><span class="normal"> </span><span class="type">int</span><span class="normal"> priority</span><span class="symbol">;</span>
+
+<span class="normal">        </span><span class="keyword">public</span><span class="normal"> </span><span class="function">Element</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> key</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> priority</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">key       </span><span class="symbol">=</span><span class="normal"> key</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">priority  </span><span class="symbol">=</span><span class="normal"> priority</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">compareTo</span><span class="symbol">(</span><span class="usertype">Element</span><span class="normal"> that</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">priority </span><span class="symbol">!=</span><span class="normal"> that</span><span class="symbol">.</span><span class="normal">priority</span><span class="symbol">)</span>
+<span class="normal">                </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">priority </span><span class="symbol">-</span><span class="normal"> that</span><span class="symbol">.</span><span class="normal">priority</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">.</span><span class="function">compareTo</span><span class="symbol">(</span><span class="normal">that</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">equals</span><span class="symbol">(</span><span class="usertype">Object</span><span class="normal"> other</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">other </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">other </span><span class="symbol">==</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">false</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">other</span><span class="symbol">.</span><span class="function">getClass</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">.</span><span class="function">getClass</span><span class="symbol">())</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> </span><span class="keyword">false</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="usertype">Element</span><span class="normal"> that </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Element</span><span class="symbol">)</span><span class="normal"> other</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">(</span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">priority </span><span class="symbol">==</span><span class="normal"> that</span><span class="symbol">.</span><span class="normal">priority</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;&amp;</span><span class="normal"> </span><span class="keyword">this</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">.</span><span class="function">equals</span><span class="symbol">(</span><span class="normal">that</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">isEmpty</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> pq</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">();</span><span class="normal"> </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">size</span><span class="symbol">()</span><span class="normal">        </span><span class="cbracket">{</span><span class="normal"> </span><span class="keyword">return</span><span class="normal"> pq</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">();</span><span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// insert a key with a given priority (changing the priority if the key is present)</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">put</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> key</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> priority</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">delete</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="usertype">Element</span><span class="normal"> element </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Element</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">,</span><span class="normal"> priority</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">,</span><span class="normal"> element</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">add</span><span class="symbol">(</span><span class="normal">element</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// does the key exist?</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">exists</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> key</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// delete key</span>
+<span class="normal">    </span><span class="type">void</span><span class="normal"> </span><span class="function">delete</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> key</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Element</span><span class="normal"> element </span><span class="symbol">=</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">element </span><span class="symbol">!=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            pq</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="normal">element</span><span class="symbol">);</span>
+<span class="normal">            st</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// return the priority of a given key</span>
+<span class="normal">    </span><span class="type">int</span><span class="normal"> </span><span class="function">get</span><span class="symbol">(</span><span class="usertype">String</span><span class="normal"> key</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Element</span><span class="normal"> element </span><span class="symbol">=</span><span class="normal"> st</span><span class="symbol">.</span><span class="function">get</span><span class="symbol">(</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> element</span><span class="symbol">.</span><span class="normal">priority</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// return minimum priority, error if empty</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">min</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Element</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> pq</span><span class="symbol">.</span><span class="function">first</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> min</span><span class="symbol">.</span><span class="normal">priority</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// return minimum priority, error if empty</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">max</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Element</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> pq</span><span class="symbol">.</span><span class="function">last</span><span class="symbol">();</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> max</span><span class="symbol">.</span><span class="normal">priority</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// delete and return the minimum value, error if empty</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> </span><span class="function">delMin</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Element</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> pq</span><span class="symbol">.</span><span class="function">first</span><span class="symbol">();</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="normal">min</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="normal">min</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> min</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// delete and return the maximum value, error if empty</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="usertype">String</span><span class="normal"> </span><span class="function">delMax</span><span class="symbol">()</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">Element</span><span class="normal"> max </span><span class="symbol">=</span><span class="normal"> pq</span><span class="symbol">.</span><span class="function">last</span><span class="symbol">();</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="normal">max</span><span class="symbol">);</span>
+<span class="normal">        st</span><span class="symbol">.</span><span class="function">remove</span><span class="symbol">(</span><span class="normal">max</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> max</span><span class="symbol">.</span><span class="normal">key</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="normal">    </span><span class="comment">// test client</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">IndirectPQ</span><span class="normal"> pq </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IndirectPQ</span><span class="symbol">();</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"test"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">31</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"is"</span><span class="symbol">,</span><span class="normal">   </span><span class="number">55</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"this"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">25</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"not"</span><span class="symbol">,</span><span class="normal">  </span><span class="number">65</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"a"</span><span class="symbol">,</span><span class="normal">    </span><span class="number">36</span><span class="symbol">);</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="string">"this"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">61</span><span class="symbol">);</span><span class="normal">      </span><span class="comment">// changes the key</span>
+<span class="normal">        pq</span><span class="symbol">.</span><span class="function">delete</span><span class="symbol">(</span><span class="string">"not"</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">pq</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">pq</span><span class="symbol">.</span><span class="function">delMax</span><span class="symbol">());</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:16:42 EDT 2022.
+</small></address>
+
+</html>

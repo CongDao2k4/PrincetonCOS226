@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>NonrecursiveDFS.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="NonrecursiveDFS code in Java">
+<meta NAME="TITLE" CONTENT="NonrecursiveDFS code in Java">
+<meta NAME="KEYWORDS" CONTENT="NonrecursiveDFS,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>NonrecursiveDFS.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "NonrecursiveDFS.java">NonrecursiveDFS.java</a>
+from <a href = "https://algs4.cs.princeton.edu/41graph">&#167;4.1 Undirected Graphs</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac NonrecursiveDFS.java</span>
+<span class="comment"> *  Execution:    java NonrecursiveDFS graph.txt s</span>
+<span class="comment"> *  Dependencies: Graph.java Queue.java Stack.java StdOut.java</span>
+<span class="comment"> *  Data files:   </span><span class="url">https://algs4.cs.princeton.edu/41graph/tinyCG.txt</span>
+<span class="comment"> *                </span><span class="url">https://algs4.cs.princeton.edu/41graph/tinyG.txt</span>
+<span class="comment"> *                </span><span class="url">https://algs4.cs.princeton.edu/41graph/mediumG.txt</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Run nonrecurisve depth-first search on an undirected graph.</span>
+<span class="comment"> *  Runs in O(E + V) time using O(V) extra space.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Explores the vertices in exactly the same order as DepthFirstSearch.java.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  %  java Graph tinyG.txt</span>
+<span class="comment"> *  13 vertices, 13 edges</span>
+<span class="comment"> *  0: 6 2 1 5</span>
+<span class="comment"> *  1: 0</span>
+<span class="comment"> *  2: 0</span>
+<span class="comment"> *  3: 5 4</span>
+<span class="comment"> *  4: 5 6 3</span>
+<span class="comment"> *  5: 3 4 0</span>
+<span class="comment"> *  6: 0 4</span>
+<span class="comment"> *  7: 8</span>
+<span class="comment"> *  8: 7</span>
+<span class="comment"> *  9: 11 10 12</span>
+<span class="comment"> *  10: 9</span>
+<span class="comment"> *  11: 9 12</span>
+<span class="comment"> *  12: 11 9</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java NonrecursiveDFS tinyG.txt 0</span>
+<span class="comment"> *  0 1 2 3 4 5 6</span>
+<span class="comment"> *</span>
+<span class="comment"> * % java NonrecursiveDFS tinyG.txt 9</span>
+<span class="comment"> * 9 10 11 12</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">Iterator</span><span class="symbol">;</span>
+
+<span class="comment">/**</span>
+<span class="comment"> *  The {</span><span class="type">@code</span><span class="comment"> NonrecursiveDFS} class represents a data type for finding</span>
+<span class="comment"> *  the vertices connected to a source vertex </span><span class="keyword">&lt;em&gt;</span><span class="comment">s</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> in the undirected</span>
+<span class="comment"> *  graph.</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  This implementation uses a nonrecursive version of depth-first search</span>
+<span class="comment"> *  with an explicit stack.</span>
+<span class="comment"> *  See {</span><span class="type">@link</span><span class="comment"> DepthFirstSearch} for the classic recursive version.</span>
+<span class="comment"> *  The constructor takes </span><span class="preproc">&amp;Theta;</span><span class="comment">(</span><span class="keyword">&lt;em&gt;</span><span class="comment">V</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> + </span><span class="keyword">&lt;em&gt;</span><span class="comment">E</span><span class="keyword">&lt;/em&gt;</span><span class="comment">) time in the worst</span>
+<span class="comment"> *  case, where </span><span class="keyword">&lt;em&gt;</span><span class="comment">V</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> is the number of vertices and </span><span class="keyword">&lt;em&gt;</span><span class="comment">E</span><span class="keyword">&lt;/em&gt;</span><span class="comment"> is the</span>
+<span class="comment"> *  number of edges.</span>
+<span class="comment"> *  The {</span><span class="type">@link</span><span class="comment"> #marked(int)} instance method takes </span><span class="preproc">&amp;Theta;</span><span class="comment">(1) time.</span>
+<span class="comment"> *  It uses </span><span class="preproc">&amp;Theta;</span><span class="comment">(</span><span class="keyword">&lt;em&gt;</span><span class="comment">V</span><span class="keyword">&lt;/em&gt;</span><span class="comment">) extra space (not including the graph).</span>
+<span class="comment"> *  </span><span class="keyword">&lt;p&gt;</span>
+<span class="comment"> *  For additional documentation,</span>
+<span class="comment"> *  see </span><span class="keyword">&lt;a</span><span class="normal"> </span><span class="type">href</span><span class="symbol">=</span><span class="string">"https://algs4.cs.princeton.edu/41graph"</span><span class="keyword">&gt;</span><span class="comment">Section 4.1</span><span class="keyword">&lt;/a&gt;</span>
+<span class="comment"> *  of </span><span class="keyword">&lt;i&gt;</span><span class="comment">Algorithms, 4th Edition</span><span class="keyword">&lt;/i&gt;</span><span class="comment"> by Robert Sedgewick and Kevin Wayne.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Robert Sedgewick</span>
+<span class="comment"> *  </span><span class="type">@author</span><span class="comment"> Kevin Wayne</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">NonrecursiveDFS</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">boolean</span><span class="symbol">[]</span><span class="normal"> marked</span><span class="symbol">;</span><span class="normal">  </span><span class="comment">// marked[v] = is there an s-v path?</span>
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Computes the vertices connected to the source vertex {</span><span class="type">@code</span><span class="comment"> s} in the graph {</span><span class="type">@code</span><span class="comment"> G}.</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> G the graph</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> s the source vertex</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless {</span><span class="type">@code</span><span class="comment"> 0 &lt;= s &lt; V}</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="function">NonrecursiveDFS</span><span class="symbol">(</span><span class="usertype">Graph</span><span class="normal"> G</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> s</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        marked </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">boolean</span><span class="symbol">[</span><span class="normal">G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">()];</span>
+
+<span class="normal">        </span><span class="function">validateVertex</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// to be able to iterate over each adjacency list, keeping track of which</span>
+<span class="normal">        </span><span class="comment">// vertex in each adjacency list needs to be explored next</span>
+<span class="normal">        Iterator</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;[]</span><span class="normal"> adj </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">Iterator</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;[])</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Iterator</span><span class="symbol">[</span><span class="normal">G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">()];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> v</span><span class="symbol">++)</span>
+<span class="normal">            adj</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">adj</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">).</span><span class="function">iterator</span><span class="symbol">();</span>
+
+<span class="normal">        </span><span class="comment">// depth-first search using an explicit stack</span>
+<span class="normal">        </span><span class="usertype">Stack&lt;Integer&gt;</span><span class="normal"> stack </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Stack</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">        marked</span><span class="symbol">[</span><span class="normal">s</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">        stack</span><span class="symbol">.</span><span class="function">push</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">stack</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> stack</span><span class="symbol">.</span><span class="function">peek</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">adj</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">].</span><span class="function">hasNext</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="type">int</span><span class="normal"> w </span><span class="symbol">=</span><span class="normal"> adj</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">].</span><span class="function">next</span><span class="symbol">();</span>
+<span class="normal">                </span><span class="comment">// StdOut.printf("check %d\n", w);</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">marked</span><span class="symbol">[</span><span class="normal">w</span><span class="symbol">])</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                    </span><span class="comment">// discovered vertex w for the first time</span>
+<span class="normal">                    marked</span><span class="symbol">[</span><span class="normal">w</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">true</span><span class="symbol">;</span>
+<span class="normal">                    </span><span class="comment">// edgeTo[w] = v;</span>
+<span class="normal">                    stack</span><span class="symbol">.</span><span class="function">push</span><span class="symbol">(</span><span class="normal">w</span><span class="symbol">);</span>
+<span class="normal">                    </span><span class="comment">// StdOut.printf("dfs(%d)\n", w);</span>
+<span class="normal">                </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="comment">// StdOut.printf("%d done\n", v);</span>
+<span class="normal">                stack</span><span class="symbol">.</span><span class="function">pop</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Is vertex {</span><span class="type">@code</span><span class="comment"> v} connected to the source vertex {</span><span class="type">@code</span><span class="comment"> s}?</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> v the vertex</span>
+<span class="comment">     * </span><span class="type">@return</span><span class="comment"> {</span><span class="type">@code</span><span class="comment"> true} if vertex {</span><span class="type">@code</span><span class="comment"> v} is connected to the source vertex {</span><span class="type">@code</span><span class="comment"> s},</span>
+<span class="comment">     *    and {</span><span class="type">@code</span><span class="comment"> false} otherwise</span>
+<span class="comment">     * </span><span class="type">@throws</span><span class="comment"> IllegalArgumentException unless {</span><span class="type">@code</span><span class="comment"> 0 &lt;= v &lt; V}</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="type">boolean</span><span class="normal"> </span><span class="function">marked</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="function">validateVertex</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> marked</span><span class="symbol">[</span><span class="normal">v</span><span class="symbol">];</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">// throw an IllegalArgumentException unless {@code 0 &lt;= v &lt; V}</span>
+<span class="normal">    </span><span class="keyword">private</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">validateVertex</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> V </span><span class="symbol">=</span><span class="normal"> marked</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">v </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> v </span><span class="symbol">&gt;=</span><span class="normal"> V</span><span class="symbol">)</span>
+<span class="normal">            </span><span class="keyword">throw</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">IllegalArgumentException</span><span class="symbol">(</span><span class="string">"vertex "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> v </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" is not between 0 and "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">V</span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="comment">/**</span>
+<span class="comment">     * Unit tests the {</span><span class="type">@code</span><span class="comment"> NonrecursiveDFS} data type.</span>
+<span class="comment">     *</span>
+<span class="comment">     * </span><span class="type">@param</span><span class="comment"> args the command-line arguments</span>
+<span class="comment">     */</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="usertype">In</span><span class="normal"> in </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">In</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="usertype">Graph</span><span class="normal"> G </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Graph</span><span class="symbol">(</span><span class="normal">in</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> s </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="function">parseInt</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">]);</span>
+<span class="normal">        </span><span class="usertype">NonrecursiveDFS</span><span class="normal"> dfs </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">NonrecursiveDFS</span><span class="symbol">(</span><span class="normal">G</span><span class="symbol">,</span><span class="normal"> s</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> v </span><span class="symbol">&lt;</span><span class="normal"> G</span><span class="symbol">.</span><span class="function">V</span><span class="symbol">();</span><span class="normal"> v</span><span class="symbol">++)</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">dfs</span><span class="symbol">.</span><span class="function">marked</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">))</span>
+<span class="normal">                StdOut</span><span class="symbol">.</span><span class="function">print</span><span class="symbol">(</span><span class="normal">v </span><span class="symbol">+</span><span class="normal"> </span><span class="string">" "</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">();</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:22:35 EDT 2022.
+</small></address>
+
+</html>

@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="Assignment_Cousera">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/wordnet.zip!/" />
+      <root url="jar://$PROJECT_DIR$/queues.zip!/" />
+      <root url="jar://$PROJECT_DIR$/kdtree.zip!/" />
+      <root url="jar://$PROJECT_DIR$/8puzzle.zip!/" />
+      <root url="jar://$PROJECT_DIR$/hello.zip!/" />
+      <root url="jar://$PROJECT_DIR$/baseball.zip!/" />
+      <root url="jar://$PROJECT_DIR$/boggle.zip!/" />
+      <root url="jar://$PROJECT_DIR$/seam.zip!/" />
+      <root url="jar://$PROJECT_DIR$/percolation.zip!/" />
+      <root url="jar://$PROJECT_DIR$/collinear.zip!/" />
+      <root url="jar://$PROJECT_DIR$/burrows.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

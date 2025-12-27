@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Autograder Feedback</title>
+<meta charset="UTF-8">
+</head>
+
+<body>
+
+<p>
+<em>
+See the Assessment Guide for information on how to interpret this report.
+</em>
+<br><br>
+
+<h2>ASSESSMENT SUMMARY</h2>
+<pre>
+
+Compilation:  <font color = #009900>PASSED</font>
+API:          <font color = #009900>PASSED</font>
+
+SpotBugs:     <font color = #009900>PASSED</font>
+PMD:          <font color = #990000>FAILED (45 warnings)</font>
+Checkstyle:   <font color = #990000>FAILED (0 errors, 3 warnings)</font>
+
+Correctness:  <font color = #0C9800>12/13 tests passed</font>
+Memory:       <font color = #009900>3/3 tests passed</font>
+Timing:       <font color = #139900>8/9 tests passed</font>
+
+Aggregate score: 93.16%
+[ Compilation: 5%, API: 5%, Style: 0%, Correctness: 60%, Timing: 10%, Memory: 20% ]
+</pre>
+
+
+<br><br>
+
+<h2>ASSESSMENT DETAILS</h2>
+
+<pre>
+
+The following files were submitted:
+----------------------------------
+ 848 Jan 31 08:58 Algorithms,\ Part\ II.iml
+147K Jan 31 08:58 Algorithms__Part_I.xml
+142K Jan 31 08:58 Algorithms__Part_I.xml.old
+ 134 Jan 31 08:58 AnnotationType.java
+6.0K Jan 31 08:58 BoggleBoard.class
+8.2K Jan 31 08:58 BoggleBoard.java
+ 647 Jan 31 08:58 BoggleGame$1.class
+1.5K Jan 31 08:58 BoggleGame$10.class
+1.3K Jan 31 08:58 BoggleGame$2.class
+1.6K Jan 31 08:58 BoggleGame$3.class
+1.4K Jan 31 08:58 BoggleGame$4.class
+1.6K Jan 31 08:58 BoggleGame$5.class
+ 657 Jan 31 08:58 BoggleGame$6.class
+ 657 Jan 31 08:58 BoggleGame$7.class
+1008 Jan 31 08:58 BoggleGame$8.class
+ 788 Jan 31 08:58 BoggleGame$9.class
+2.3K Jan 31 08:58 BoggleGame$BoardPanel$1.class
+1.1K Jan 31 08:58 BoggleGame$BoardPanel$2.class
+5.4K Jan 31 08:58 BoggleGame$BoardPanel.class
+1.5K Jan 31 08:58 BoggleGame$Countdown.class
+ 19K Jan 31 08:58 BoggleGame.class
+ 44K Jan 31 08:58 BoggleGame.java
+ 184 Jan 31 08:58 BoggleSolver$1.class
+ 902 Jan 31 08:58 BoggleSolver$Node.class
+5.4K Jan 31 08:58 BoggleSolver.class
+4.8K Jan 31 08:58 BoggleSolver.java
+ 189 Jan 31 08:58 Class.java
+ 128 Jan 31 08:58 Enum.java
+ 199 Jan 31 08:58 File\ Header.java
+ 133 Jan 31 08:58 Interface.java
+4.2K Jan 31 08:58 Project.xml
+1.1M Jan 31 08:58 algs4.jar
+ 353 Jan 31 08:58 algs4.xml
+  52 Jan 31 08:58 board-16q.txt
+  63 Jan 31 08:58 board-antidisestablishmentarianisms.txt
+  52 Jan 31 08:58 board-aqua.txt
+  36 Jan 31 08:58 board-couscous.txt
+  36 Jan 31 08:58 board-diagonal.txt
+  70 Jan 31 08:58 board-dichlorodiphenyltrichloroethanes.txt
+  36 Jan 31 08:58 board-dodo.txt
+ 206 Jan 31 08:58 board-estrangers.txt
+  36 Jan 31 08:58 board-horizontal.txt
+  36 Jan 31 08:58 board-inconsequentially.txt
+  36 Jan 31 08:58 board-noon.txt
+ 206 Jan 31 08:58 board-pneumonoultramicroscopicsilicovolcanoconiosis.txt
+  54 Jan 31 08:58 board-points0.txt
+  54 Jan 31 08:58 board-points1.txt
+  54 Jan 31 08:58 board-points100.txt
+  54 Jan 31 08:58 board-points1000.txt
+  54 Jan 31 08:58 board-points1111.txt
+  54 Jan 31 08:58 board-points1250.txt
+  54 Jan 31 08:58 board-points13464.txt
+  54 Jan 31 08:58 board-points1500.txt
+  54 Jan 31 08:58 board-points2.txt
+  54 Jan 31 08:58 board-points200.txt
+  36 Jan 31 08:58 board-points2000.txt
+  77 Jan 31 08:58 board-points26539.txt
+  54 Jan 31 08:58 board-points3.txt
+  54 Jan 31 08:58 board-points300.txt
+  54 Jan 31 08:58 board-points4.txt
+  54 Jan 31 08:58 board-points400.txt
+  36 Jan 31 08:58 board-points4410.txt
+  36 Jan 31 08:58 board-points4527.txt
+  36 Jan 31 08:58 board-points4540.txt
+  54 Jan 31 08:58 board-points5.txt
+  54 Jan 31 08:58 board-points500.txt
+  54 Jan 31 08:58 board-points750.txt
+  54 Jan 31 08:58 board-points777.txt
+  54 Jan 31 08:58 board-q.txt
+  37 Jan 31 08:58 board-quinquevalencies.txt
+  36 Jan 31 08:58 board-qwerty.txt
+ 166 Jan 31 08:58 board-rotavator.txt
+  36 Jan 31 08:58 board-vertical.txt
+  48 Jan 31 08:58 board4x4.txt
+ 73K Jan 31 08:58 checkstyle-coursera.xml
+1.1K Jan 31 08:58 checkstyle-idea.xml
+120K Jan 31 08:58 checkstyle-lift.jar
+ 15K Jan 31 08:58 checkstyle-suppressions.xml
+ 15K Jan 31 08:58 codeInsightSettings.xml
+ 142 Jan 31 08:58 codeStyleConfig.xml
+ 353 Jan 31 08:58 compiler.xml
+2.3K Jan 31 08:58 dictionary-16q.txt
+ 369 Jan 31 08:58 dictionary-2letters.txt
+ 51K Jan 31 08:58 dictionary-algs4.txt
+164K Jan 31 08:58 dictionary-common.txt
+1.7M Jan 31 08:58 dictionary-enable2k.txt
+ 11K Jan 31 08:58 dictionary-nursery.txt
+189K Jan 31 08:58 dictionary-shakespeare.txt
+2.6M Jan 31 08:58 dictionary-sowpods.txt
+1.7M Jan 31 08:58 dictionary-twl06.txt
+2.6M Jan 31 08:58 dictionary-yawl.txt
+6.4M Jan 31 08:58 dictionary-zingarelli2005.txt
+ 201 Jan 31 08:58 encodings.xml
+ 267 Jan 31 08:58 externalDependencies.xml
+ 290 Jan 31 08:58 file.template.settings.xml
+ 352 Jan 31 08:58 findbugs-idea.xml
+ 190 Jan 31 08:58 lift.xml
+ 12K Jan 31 08:58 logo.png
+ 175 Jan 31 08:58 misc.xml
+  58 Jan 31 08:58 module-info.java
+ 278 Jan 31 08:58 modules.xml
+ 102 Jan 31 08:58 package-info.java
+ 183 Jan 31 08:58 profiles_settings.xml
+ 357 Jan 31 08:58 saveactions_settings.xml
+ 21K Jan 31 08:58 spotbugs.xml
+7.1K Jan 31 08:58 workspace.xml
+
+
+********************************************************************************
+*  COMPILING                                                                    
+********************************************************************************
+
+
+% javac BoggleSolver.java
+*-----------------------------------------------------------
+
+
+================================================================
+
+
+Checking the APIs of your programs.
+*-----------------------------------------------------------
+BoggleSolver:
+
+================================================================
+
+
+********************************************************************************
+*  CHECKING STYLE AND COMMON BUG PATTERNS                                       
+********************************************************************************
+
+
+% spotbugs *.class
+*-----------------------------------------------------------
+
+
+================================================================
+
+
+% pmd .
+*-----------------------------------------------------------
+BoggleGame.java:51: Classes implementing Serializable should set a serialVersionUID [MissingSerialVersionUID]
+BoggleGame.java:51: Too many fields [TooManyFields]
+BoggleGame.java:58: Avoid unused private instance (or static) variables, such as 'DEF_HEIGHT'. [UnusedPrivateField]
+BoggleGame.java:59: Avoid unused private instance (or static) variables, such as 'DEF_WIDTH'. [UnusedPrivateField]
+BoggleGame.java:96: The private instance (or static) variable 'BOARD_ROWS' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:97: The private instance (or static) variable 'BOARD_COLS' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:105: The private instance (or static) variable 'emptyList' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:110: The private instance (or static) variable 'foundWordsList' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:111: The private instance (or static) variable 'validWordsList' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:112: The private instance (or static) variable 'opponentFoundWordsList' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:118: The private instance (or static) variable 'shakespeareDictionary' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:119: The private instance (or static) variable 'nurseryDictionary' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:120: The private instance (or static) variable 'commonDictionary' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:121: The private instance (or static) variable 'algs4Dictionary' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:124: Can you replace the instance (or static) variable 'menuBar' with a local variable? [SingularField]
+BoggleGame.java:125: Can you replace the instance (or static) variable 'gameMenu' with a local variable? [SingularField]
+BoggleGame.java:126: Can you replace the instance (or static) variable 'difficultySelection' with a local variable? [SingularField]
+BoggleGame.java:127: The private instance (or static) variable 'solver' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:128: The private instance (or static) variable 'clock' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:129: The private instance (or static) variable 'bp' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:131: The private instance (or static) variable 'scoreLabel' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:132: The private instance (or static) variable 'possiblePointsLabel' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:133: The private instance (or static) variable 'oppScoreLabel' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:138: It is a good practice to call super() in a constructor [CallSuperInConstructor]
+BoggleGame.java:171: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:179: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:193: Avoid unused local variables, such as 'jc'. [UnusedLocalVariable]
+BoggleGame.java:655: Classes implementing Serializable should set a serialVersionUID [MissingSerialVersionUID]
+BoggleGame.java:656: The private instance (or static) variable 'NUM_OF_CUBES' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:657: The private instance (or static) variable 'cubes' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:658: The private instance (or static) variable 'CUBE_DIM' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+BoggleGame.java:665: It is a good practice to call super() in a constructor [CallSuperInConstructor]
+BoggleGame.java:729: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:731: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:733: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:735: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:739: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:741: The method body is empty. If this is your intent, document it with a comment. [UncommentedEmptyMethodBody]
+BoggleGame.java:925: Are you using the correct loop index variable? You are modifying an outer 'for' loop index variable in an inner 'for' loop update expression. [JumbledIncrementer]
+BoggleGame.java:945: Do not call 'System.exit()' in this course. [DoNotCallSystemExit]
+BoggleGame.java:959: Do not use threads in this course. [DoNotUseThreads]
+BoggleGame.java:976: Do not call 'System.exit()' in this course. [DoNotCallSystemExit]
+BoggleGame.java:988: Do not call 'System.exit()' in this course. [DoNotCallSystemExit]
+BoggleGame.java:995: Do not call 'System.exit()' in this course. [DoNotCallSystemExit]
+BoggleGame.java:999: Unnecessary use of fully qualified name 'java.lang.IllegalArgumentException' due to existing implicit import 'java.lang.*'. [UnnecessaryFullyQualifiedName]
+PMD ends with 45 warnings.
+
+
+================================================================
+
+
+% checkstyle *.java
+*-----------------------------------------------------------
+[WARN] BoggleSolver.java:17:19: The modifier 'static' is out of order. The preferred order is ['public', 'protected', 'private', 'abstract', 'static', 'final', 'transient', 'volatile', 'synchronized', 'native', and 'strictfp']. [ModifierOrder]
+[WARN] BoggleSolver.java:60:31: The method 'DFS' must start with a lowercase letter and use camelCase. [MethodName]
+[WARN] BoggleSolver.java:75:18: The method 'Try' must start with a lowercase letter and use camelCase. [MethodName]
+Checkstyle ends with 0 errors and 3 warnings.
+
+
+================================================================
+
+
+********************************************************************************
+*  TESTING CORRECTNESS
+********************************************************************************
+
+Testing correctness of BoggleSolver
+*-----------------------------------------------------------
+Tests 1-9 create one BoggleSolver object corresponding to the specified
+dictionary and call getAllValidWords() with several different boards
+as arguments.
+
+Running 13 total tests.
+
+Test 1: check getAllValidWords() on two fixed 4-by-4 boards given in assignment
+  * dictionary = dictionary-algs4.txt; board = board4x4.txt
+  * dictionary = dictionary-algs4.txt; board = board-q.txt
+==&gt; passed
+
+Test 2: check getAllValidWords() on fixed 4-by-4 boards
+  * dictionary = dictionary-yawl.txt; board = board4x4.txt
+  * dictionary = dictionary-yawl.txt; board = board-points1.txt
+  * dictionary = dictionary-yawl.txt; board = board-points2.txt
+  * dictionary = dictionary-yawl.txt; board = board-points3.txt
+  * dictionary = dictionary-yawl.txt; board = board-points4.txt
+  * dictionary = dictionary-yawl.txt; board = board-points5.txt
+==&gt; passed
+
+Test 3: check getAllValidWords() on more fixed 4-by-4 boards
+  * dictionary = dictionary-yawl.txt; board = board-points100.txt
+  * dictionary = dictionary-yawl.txt; board = board-points200.txt
+  * dictionary = dictionary-yawl.txt; board = board-points300.txt
+  * dictionary = dictionary-yawl.txt; board = board-points400.txt
+  * dictionary = dictionary-yawl.txt; board = board-points500.txt
+  * dictionary = dictionary-yawl.txt; board = board-points750.txt
+  * dictionary = dictionary-yawl.txt; board = board-points1000.txt
+  * dictionary = dictionary-yawl.txt; board = board-points1250.txt
+  * dictionary = dictionary-yawl.txt; board = board-points1500.txt
+  * dictionary = dictionary-yawl.txt; board = board-points2000.txt
+==&gt; passed
+
+Test 4: check getAllValidWords() on random Hasbro boards
+  * dictionary = dictionary-yawl.txt; board = 10 random Hasbro boards
+  * dictionary = dictionary-yawl.txt; board = 50 random Hasbro boards
+  * dictionary = dictionary-yawl.txt; board = 100 random Hasbro boards
+==&gt; passed
+
+Test 5: check getAllValidWords() on high-scoring n-by-n boards
+  * dictionary = dictionary-yawl.txt; board = board-points4410.txt
+  * dictionary = dictionary-yawl.txt; board = board-points4527.txt
+  * dictionary = dictionary-yawl.txt; board = board-points13464.txt
+  * dictionary = dictionary-yawl.txt; board = board-points26539.txt
+==&gt; passed
+
+Test 6: check getAllValidWords() on exotic boards
+  * dictionary = dictionary-yawl.txt; board = board-dodo.txt
+  * dictionary = dictionary-yawl.txt; board = board-noon.txt
+  * dictionary = dictionary-yawl.txt; board = board-couscous.txt
+  * dictionary = dictionary-yawl.txt; board = board-rotavator.txt
+  * dictionary = dictionary-yawl.txt; board = board-estrangers.txt
+  * dictionary = dictionary-yawl.txt; board = board-antidisestablishmentarianisms.txt
+  * dictionary = dictionary-yawl.txt; board = board-dichlorodiphenyltrichloroethanes.txt
+  * dictionary = dictionary-yawl.txt; board = board-pneumonoultramicroscopicsilicovolcanoconiosis.txt
+==&gt; passed
+
+Test 7: check getAllValidWords() on boards with a Q
+  * dictionary = dictionary-yawl.txt; board = board-qwerty.txt
+  * dictionary = dictionary-yawl.txt; board = board-quinquevalencies.txt
+  * dictionary = dictionary-yawl.txt; board = board-inconsequentially.txt
+  * dictionary = dictionary-yawl.txt; board = board-qaimaqam.txt
+  * dictionary = dictionary-yawl.txt; board = board-aqua.txt
+  * dictionary = dictionary-yawl.txt; board = 100 random Hasbro boards
+  * dictionary = dictionary-16q.txt; board = board-9q.txt
+  * dictionary = dictionary-16q.txt; board = board-16q.txt
+==&gt; passed
+
+Test 8: check getAllValidWords() on random m-by-n boards
+  * dictionary = dictionary-common.txt; board = 100 random 3-by-3 boards
+  * dictionary = dictionary-common.txt; board = 100 random 4-by-4 boards
+  * dictionary = dictionary-common.txt; board = 100 random 5-by-5 boards
+  * dictionary = dictionary-common.txt; board = 20 random 5-by-10 boards
+  * dictionary = dictionary-common.txt; board = 20 random 10-by-5 boards
+==&gt; passed
+
+Test 9: check getAllValidWords() on random m-by-n boards
+  * dictionary = dictionary-common.txt; board = 10 random 2-by-2 boards
+  * dictionary = dictionary-common.txt; board = 10 random 1-by-10 boards
+  * dictionary = dictionary-common.txt; board = 10 random 10-by-1 boards
+  * dictionary = dictionary-common.txt; board = 10 random 1-by-1 boards
+  * dictionary = dictionary-common.txt; board = 10 random 1-by-2 boards
+  * dictionary = dictionary-common.txt; board = 10 random 2-by-1 boards
+==&gt; passed
+
+Test 10: check getAllValidWords() on boards with no valid words
+  * dictionary = dictionary-nursery.txt; board = board-points0.txt
+  * dictionary = dictionary-2letters.txt; board = board-points4410.txt
+==&gt; passed
+
+Test 11: mutating dictionary[] after passing to BoggleSolver constructor
+  * dictionary = dictionary-algs4.txt
+  * dictionary = dictionary-algs4.txt; board = 10 random Hasbro boards
+==&gt; passed
+
+Test 12: create more than one BoggleSolver object at a time
+         [ BoggleSolver object 1 uses dictionary-algs4.txt   ]
+         [ BoggleSolver object 2 uses dictionary-nursery.txt ]
+  * dictionary = dictionary-algs4.txt; board = 10 random Hasbro boards
+  * dictionary = dictionary-nursery.txt; board = 10 random Hasbro boards
+  * dictionary = dictionary-algs4.txt; board = 10 random Hasbro boards
+==&gt; passed
+
+Test 13: check scoreOf() on various dictionaries
+  * dictionary = dictionary-algs4.txt
+    - word = 'DRIVE'
+    - student   score = 5
+    - reference score = 2
+    - failed on trial 2 of 1000
+
+  * dictionary = dictionary-common.txt
+    - word = 'FORGET'
+    - student   score = 6
+    - reference score = 3
+    - failed on trial 2 of 5000
+
+  * dictionary = dictionary-shakespeare.txt
+    - word = 'SPECIAL'
+    - student   score = 7
+    - reference score = 5
+    - failed on trial 2 of 10000
+
+  * dictionary = dictionary-nursery.txt
+    - word = 'AT'
+    - student   score = 2
+    - reference score = 0
+    - failed on trial 5 of 100
+
+  * dictionary = dictionary-yawl.txt
+    - word = 'MALE'
+    - student   score = 4
+    - reference score = 1
+    - failed on trial 1 of 20000
+
+==&gt; <font color = #990000><b>FAILED</b></font>
+
+
+Total: 12/13 tests passed!
+
+
+================================================================
+********************************************************************************
+*  MEMORY
+********************************************************************************
+
+Analyzing memory of BoggleSolver
+*-----------------------------------------------------------
+Running 3 total tests.
+
+Test 1: memory with dictionary-algs4.txt (must be &lt;= 2x reference solution)
+  * memory of dictionary[]           = 450264 bytes
+  * memory of student   BoggleSolver = 4547160 bytes
+  * memory of reference BoggleSolver = 5091200 bytes
+  * student / reference              = 0.89
+==&gt; passed
+
+Test 2: memory with dictionary-shakespeare.txt (must be &lt;= 2x reference solution)
+  * memory of dictionary[]           = 1754288 bytes
+  * memory of student   BoggleSolver = 15261136 bytes
+  * memory of reference BoggleSolver = 17306560 bytes
+  * student / reference              = 0.88
+==&gt; passed
+
+Test 3: memory with dictionary-yawl.txt (must be &lt;= 2x reference solution)
+  * memory of dictionary[]           = 20260296 bytes
+  * memory of student   BoggleSolver = 154415832 bytes
+  * memory of reference BoggleSolver = 175518440 bytes
+  * student / reference              = 0.88
+==&gt; passed
+
+
+Total: 3/3 tests passed!
+
+
+================================================================
+
+
+
+********************************************************************************
+*  TIMING
+********************************************************************************
+
+Timing BoggleSolver
+*-----------------------------------------------------------
+All timing tests are for random 4-by-4 boards (using the Hasbro dice).
+The dictionary is specified with each test.
+
+Running 9 total tests.
+
+Test 1: timing constructor (must be &lt;= 5x reference solution)
+ *  dictionary-algs4.txt
+    - student   solution time (in seconds): 0.01
+    - reference solution time (in seconds): 0.00
+    - ratio:                                2.35
+
+==&gt; passed
+
+ *  dictionary-enable2k.txt
+    - student   solution time (in seconds): 0.04
+    - reference solution time (in seconds): 0.02
+    - ratio:                                2.11
+
+==&gt; passed
+
+ *  dictionary-yawl.txt
+    - student   solution time (in seconds): 0.05
+    - reference solution time (in seconds): 0.03
+    - ratio:                                1.93
+
+==&gt; passed
+
+ *  dictionary-zingarelli2005.txt
+    - student   solution time (in seconds): 0.11
+    - reference solution time (in seconds): 0.06
+    - ratio:                                1.79
+
+==&gt; passed
+
+Test 2: timing getAllValidWords() for 5.0 seconds using dictionary-yawl.txt
+        (must be &lt;= 2x reference solution)
+    - reference solution calls per second: 9272.53
+    - student   solution calls per second: 2459.17
+    - reference / student ratio:           3.77
+
+=&gt; passed    student &lt;= 10000x reference
+=&gt; passed    student &lt;=    25x reference
+=&gt; passed    student &lt;=    10x reference
+=&gt; passed    student &lt;=     5x reference
+=&gt; <font color = #990000><b>FAILED</b></font>    student &lt;=     2x reference
+
+
+Total: 8/9 tests passed!
+
+
+================================================================
+
+
+
+
+</pre>
+</body>
+</html>

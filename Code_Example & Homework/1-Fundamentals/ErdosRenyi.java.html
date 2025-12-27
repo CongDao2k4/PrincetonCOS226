@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>ErdosRenyi.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="ErdosRenyi code in Java">
+<meta NAME="TITLE" CONTENT="ErdosRenyi code in Java">
+<meta NAME="KEYWORDS" CONTENT="ErdosRenyi,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>ErdosRenyi.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "ErdosRenyi.java">ErdosRenyi.java</a>
+from <a href = "https://algs4.cs.princeton.edu/15uf">&#167;1.5 Case Study: Union-Find</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac ErdosRenyi.java</span>
+<span class="comment"> *  Execution:    java ErdosRenyi n trials</span>
+<span class="comment"> *  Dependencies: StdRandom.java StdStats.java UF.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Repeatedly add random edges (with replacement) to a graph on n</span>
+<span class="comment"> *  vertices until the graph is connected. Report the mean and</span>
+<span class="comment"> *  standard deviation of the number of edges added.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  When n is large, Erdos and Renyi proved that after about 1/2 n ln n</span>
+<span class="comment"> *  additions, the graph will have a 50/50 chance of being connected.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java ErdosRenyi 100 1000</span>
+<span class="comment"> *  1/2 n ln n = 230.25850929940458</span>
+<span class="comment"> *  mean       = 263.584</span>
+<span class="comment"> *  stddev     = 64.39309702134229</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java ErdosRenyi 100 1000</span>
+<span class="comment"> *  1/2 n ln n = 230.25850929940458</span>
+<span class="comment"> *  mean       = 263.93</span>
+<span class="comment"> *  stddev     = 63.54839966513712</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java ErdosRenyi 12800 1000</span>
+<span class="comment"> *  1/2 n ln n = 60526.08287940933</span>
+<span class="comment"> *  mean       = 64231.526</span>
+<span class="comment"> *  stddev     = 8362.273790143683</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *         Computational Experiments</span>
+<span class="comment"> *         --------------------------</span>
+<span class="comment"> *</span>
+<span class="comment"> *       n    mean # edges    1/2 n ln n</span>
+<span class="comment"> *  ------------------------------------</span>
+<span class="comment"> *     100            260            230</span>
+<span class="comment"> *     200            600            530</span>
+<span class="comment"> *     400           1300           1200</span>
+<span class="comment"> *     800           2900           2700</span>
+<span class="comment"> *    1600           6400           5900</span>
+<span class="comment"> *    3200          14000          13000</span>
+<span class="comment"> *    6400          30000          28000</span>
+<span class="comment"> *   12800          64000          61000</span>
+<span class="comment"> *   25600         140000         130000</span>
+<span class="comment"> *   51200         290000         280000</span>
+<span class="comment"> *  102400         620000         590000</span>
+<span class="comment"> *  204800        1300000        1300000</span>
+<span class="comment"> *  409600        2700000        2700000</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">ErdosRenyi</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="comment">// number of random edges (with replacement) needed for an n-vertex</span>
+<span class="normal">    </span><span class="comment">// graph to become connected</span>
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function">count</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> n</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> edges </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="usertype">UF</span><span class="normal"> uf </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">UF</span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">uf</span><span class="symbol">.</span><span class="function">count</span><span class="symbol">()</span><span class="normal"> </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> StdRandom</span><span class="symbol">.</span><span class="function">uniformInt</span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="type">int</span><span class="normal"> j </span><span class="symbol">=</span><span class="normal"> StdRandom</span><span class="symbol">.</span><span class="function">uniformInt</span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">uf</span><span class="symbol">.</span><span class="function">find</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> uf</span><span class="symbol">.</span><span class="function">find</span><span class="symbol">(</span><span class="normal">j</span><span class="symbol">))</span><span class="normal"> uf</span><span class="symbol">.</span><span class="function">union</span><span class="symbol">(</span><span class="normal">i</span><span class="symbol">,</span><span class="normal"> j</span><span class="symbol">);</span>
+<span class="normal">            edges</span><span class="symbol">++;</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">        </span><span class="keyword">return</span><span class="normal"> edges</span><span class="symbol">;</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="function">parseInt</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">]);</span><span class="normal">          </span><span class="comment">// number of vertices</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> trials </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="function">parseInt</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">]);</span><span class="normal">     </span><span class="comment">// number of trials</span>
+<span class="normal">        </span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> edges </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">int</span><span class="symbol">[</span><span class="normal">trials</span><span class="symbol">];</span><span class="normal">              </span><span class="comment">// record statistics</span>
+
+<span class="normal">        </span><span class="comment">// repeat the experiment trials times</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> t </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> t </span><span class="symbol">&lt;</span><span class="normal"> trials</span><span class="symbol">;</span><span class="normal"> t</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            edges</span><span class="symbol">[</span><span class="normal">t</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="function">count</span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// report statistics</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"1/2 n ln n = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0.5</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> n </span><span class="symbol">*</span><span class="normal"> Math</span><span class="symbol">.</span><span class="function">log</span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"mean       = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> StdStats</span><span class="symbol">.</span><span class="function">mean</span><span class="symbol">(</span><span class="normal">edges</span><span class="symbol">));</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"stddev     = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> StdStats</span><span class="symbol">.</span><span class="function">stddev</span><span class="symbol">(</span><span class="normal">edges</span><span class="symbol">));</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:04:10 EDT 2022.
+</small></address>
+
+</html>

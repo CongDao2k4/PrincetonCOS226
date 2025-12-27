@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>LPT.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="LPT code in Java">
+<meta NAME="TITLE" CONTENT="LPT code in Java">
+<meta NAME="KEYWORDS" CONTENT="LPT,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>LPT.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "LPT.java">LPT.java</a>
+from <a href = "https://algs4.cs.princeton.edu/25applications">&#167;2.5 Sorting Applications</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac LPT.java</span>
+<span class="comment"> *  Execution:    java LPT m &lt; jobs.txt</span>
+<span class="comment"> *  Dependencies: Processor.java Job.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Find an approximate solution to the load balancing</span>
+<span class="comment"> *  problem using the LPT (longest processing time first) rule.</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">Arrays</span><span class="symbol">;</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">LPT</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> m </span><span class="symbol">=</span><span class="normal"> Integer</span><span class="symbol">.</span><span class="function">parseInt</span><span class="symbol">(</span><span class="normal">args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">]);</span><span class="normal">   </span><span class="comment">// number of machines</span>
+
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readInt</span><span class="symbol">();</span>
+<span class="normal">        Job</span><span class="symbol">[]</span><span class="normal"> jobs </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Job</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">String</span><span class="normal"> name </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readString</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="type">double</span><span class="normal"> time </span><span class="symbol">=</span><span class="normal"> StdIn</span><span class="symbol">.</span><span class="function">readDouble</span><span class="symbol">();</span>
+<span class="normal">            jobs</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Job</span><span class="symbol">(</span><span class="normal">name</span><span class="symbol">,</span><span class="normal"> time</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// sort jobs in ascending order of processing time</span>
+<span class="normal">        Arrays</span><span class="symbol">.</span><span class="function">sort</span><span class="symbol">(</span><span class="normal">jobs</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// generate m empty processors and put on priority queue</span>
+<span class="normal">        </span><span class="usertype">MinPQ&lt;Processor&gt;</span><span class="normal"> pq </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> MinPQ</span><span class="symbol">&lt;</span><span class="normal">Processor</span><span class="symbol">&gt;(</span><span class="normal">m</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> m</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="normal">            pq</span><span class="symbol">.</span><span class="function">insert</span><span class="symbol">(</span><span class="keyword">new</span><span class="normal"> </span><span class="function">Processor</span><span class="symbol">());</span>
+
+
+<span class="normal">        </span><span class="comment">// assign each job (in decreasing order of time) to processor that is least busy</span>
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> j </span><span class="symbol">=</span><span class="normal"> n</span><span class="symbol">-</span><span class="number">1</span><span class="symbol">;</span><span class="normal"> j </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> j</span><span class="symbol">--)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">Processor</span><span class="normal"> min </span><span class="symbol">=</span><span class="normal"> pq</span><span class="symbol">.</span><span class="function">delMin</span><span class="symbol">();</span>
+<span class="normal">            min</span><span class="symbol">.</span><span class="function">add</span><span class="symbol">(</span><span class="normal">jobs</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">]);</span>
+<span class="normal">            pq</span><span class="symbol">.</span><span class="function">insert</span><span class="symbol">(</span><span class="normal">min</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="comment">// print out contents of each processor</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">pq</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">pq</span><span class="symbol">.</span><span class="function">delMin</span><span class="symbol">());</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:08:22 EDT 2022.
+</small></address>
+
+</html>

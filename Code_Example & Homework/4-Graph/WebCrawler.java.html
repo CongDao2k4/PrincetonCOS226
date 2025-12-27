@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>WebCrawler.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="WebCrawler code in Java">
+<meta NAME="TITLE" CONTENT="WebCrawler code in Java">
+<meta NAME="KEYWORDS" CONTENT="WebCrawler,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>WebCrawler.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "WebCrawler.java">WebCrawler.java</a>
+from <a href = "https://algs4.cs.princeton.edu/42digraph">&#167;4.2 Directed Graphs</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac WebCrawler.java In.java</span>
+<span class="comment"> *  Execution:    java WebCrawler url</span>
+<span class="comment"> *  Dependencies: SET.java Queue.java In.java</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Downloads the web page and prints out all urls on the web page.</span>
+<span class="comment"> *  Gives an idea of how Google's spider crawls the web. Instead of</span>
+<span class="comment"> *  looking for hyperlinks, we just look for patterns of the form:</span>
+<span class="comment"> *  http:// followed by an alternating sequence of alphanumeric</span>
+<span class="comment"> *  characters and dots, ending with a sequence of alphanumeric</span>
+<span class="comment"> *  characters.</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java WebCrawler </span><span class="url">http://www.slashdot.org</span>
+<span class="comment"> *  </span><span class="url">http://www.slashdot.org</span>
+<span class="comment"> *  </span><span class="url">http://www.osdn.com</span>
+<span class="comment"> *  </span><span class="url">http://sf.net</span>
+<span class="comment"> *  </span><span class="url">http://thinkgeek.com</span>
+<span class="comment"> *  </span><span class="url">http://freshmeat.net</span>
+<span class="comment"> *  </span><span class="url">http://newsletters.osdn.com</span>
+<span class="comment"> *  </span><span class="url">http://slashdot.org</span>
+<span class="comment"> *  </span><span class="url">http://osdn.com</span>
+<span class="comment"> *  </span><span class="url">http://ads.osdn.com</span>
+<span class="comment"> *  </span><span class="url">http://sourceforge.net</span>
+<span class="comment"> *  </span><span class="url">http://www.msnbc.msn.com</span>
+<span class="comment"> *  </span><span class="url">http://www.rhythmbox.org</span>
+<span class="comment"> *  </span><span class="url">http://www.apple.com</span>
+<span class="comment"> *  ...</span>
+<span class="comment"> *</span>
+<span class="comment"> *  % java WebCrawler </span><span class="url">https://www.cs.princeton.edu</span>
+<span class="comment"> *  </span><span class="url">http://www.cs.princeton.edu</span>
+<span class="comment"> *  </span><span class="url">http://www.w3.org</span>
+<span class="comment"> *  </span><span class="url">http://maps.yahoo.com</span>
+<span class="comment"> *  </span><span class="url">http://www.princeton.edu</span>
+<span class="comment"> *  </span><span class="url">http://www.Princeton.EDU</span>
+<span class="comment"> *  </span><span class="url">http://ncstrl.cs.Princeton.EDU</span>
+<span class="comment"> *  </span><span class="url">http://www.genomics.princeton.edu</span>
+<span class="comment"> *  </span><span class="url">http://www.math.princeton.edu</span>
+<span class="comment"> *  </span><span class="url">http://libweb.Princeton.EDU</span>
+<span class="comment"> *  </span><span class="url">http://libweb2.princeton.edu</span>
+<span class="comment"> *  </span><span class="url">http://www.acm.org</span>
+<span class="comment"> *  ...</span>
+<span class="comment"> *</span>
+<span class="comment"> *</span>
+<span class="comment"> *  Instead of setting the system property in the code, you could do it</span>
+<span class="comment"> *  from the commandline</span>
+<span class="comment"> *  % java -Dsun.net.client.defaultConnectTimeout=250 WebCrawler </span><span class="url">http://www.cs.princeton.edu</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">regex</span><span class="symbol">.</span><span class="normal">Matcher</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">regex</span><span class="symbol">.</span><span class="normal">Pattern</span><span class="symbol">;</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">WebCrawler</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">        </span><span class="comment">// timeout connection after 500 miliseconds</span>
+<span class="normal">        System</span><span class="symbol">.</span><span class="function">setProperty</span><span class="symbol">(</span><span class="string">"sun.net.client.defaultConnectTimeout"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"500"</span><span class="symbol">);</span>
+<span class="normal">        System</span><span class="symbol">.</span><span class="function">setProperty</span><span class="symbol">(</span><span class="string">"sun.net.client.defaultReadTimeout"</span><span class="symbol">,</span><span class="normal">    </span><span class="string">"1000"</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// initial web page</span>
+<span class="normal">        </span><span class="usertype">String</span><span class="normal"> s </span><span class="symbol">=</span><span class="normal"> args</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">];</span>
+
+<span class="normal">        </span><span class="comment">// list of web pages to be examined</span>
+<span class="normal">        </span><span class="usertype">Queue&lt;String&gt;</span><span class="normal"> queue </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> Queue</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">&gt;();</span>
+<span class="normal">        queue</span><span class="symbol">.</span><span class="function">enqueue</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// set of examined web pages</span>
+<span class="normal">        </span><span class="usertype">SET&lt;String&gt;</span><span class="normal"> marked </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> SET</span><span class="symbol">&lt;</span><span class="normal">String</span><span class="symbol">&gt;();</span>
+<span class="normal">        marked</span><span class="symbol">.</span><span class="function">add</span><span class="symbol">(</span><span class="normal">s</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="comment">// breadth first search crawl of web</span>
+<span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">queue</span><span class="symbol">.</span><span class="function">isEmpty</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">String</span><span class="normal"> v </span><span class="symbol">=</span><span class="normal"> queue</span><span class="symbol">.</span><span class="function">dequeue</span><span class="symbol">();</span>
+<span class="normal">            StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">);</span>
+
+<span class="normal">            </span><span class="usertype">String</span><span class="normal"> input </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">null</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="keyword">try</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">In</span><span class="normal"> in </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">In</span><span class="symbol">(</span><span class="normal">v</span><span class="symbol">);</span>
+<span class="normal">                input </span><span class="symbol">=</span><span class="normal"> in</span><span class="symbol">.</span><span class="function">readAll</span><span class="symbol">().</span><span class="function">toLowerCase</span><span class="symbol">();</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="keyword">catch</span><span class="normal"> </span><span class="symbol">(</span><span class="usertype">IllegalArgumentException</span><span class="normal"> e</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"[could not open "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> v </span><span class="symbol">+</span><span class="normal"> </span><span class="string">"]"</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="keyword">continue</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">            </span><span class="comment">// if (input == null) continue;</span>
+
+
+<span class="normal">           </span><span class="comment">/*************************************************************</span>
+<span class="comment">            *  Find links of the form: </span><span class="url">http://xxx.yyy.com</span>
+<span class="comment">            *  \\w+ for one or more alpha-numeric characters</span>
+<span class="comment">            *  \\. for dot</span>
+<span class="comment">            *  could take first two statements out of loop</span>
+<span class="comment">            *************************************************************/</span>
+<span class="normal">            </span><span class="usertype">String</span><span class="normal"> regexp </span><span class="symbol">=</span><span class="normal"> </span><span class="string">"(http|https)://(</span><span class="specialchar">\\</span><span class="string">w+</span><span class="specialchar">\\</span><span class="string">.)+(edu|com|gov|org)"</span><span class="symbol">;</span>
+<span class="normal">            </span><span class="usertype">Pattern</span><span class="normal"> pattern </span><span class="symbol">=</span><span class="normal"> Pattern</span><span class="symbol">.</span><span class="function">compile</span><span class="symbol">(</span><span class="normal">regexp</span><span class="symbol">);</span>
+
+<span class="normal">            </span><span class="usertype">Matcher</span><span class="normal"> matcher </span><span class="symbol">=</span><span class="normal"> pattern</span><span class="symbol">.</span><span class="function">matcher</span><span class="symbol">(</span><span class="normal">input</span><span class="symbol">);</span>
+
+<span class="normal">            </span><span class="comment">// find and print all matches</span>
+<span class="normal">            </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">matcher</span><span class="symbol">.</span><span class="function">find</span><span class="symbol">())</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">String</span><span class="normal"> w </span><span class="symbol">=</span><span class="normal"> matcher</span><span class="symbol">.</span><span class="function">group</span><span class="symbol">();</span>
+<span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(!</span><span class="normal">marked</span><span class="symbol">.</span><span class="function">contains</span><span class="symbol">(</span><span class="normal">w</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                    queue</span><span class="symbol">.</span><span class="function">enqueue</span><span class="symbol">(</span><span class="normal">w</span><span class="symbol">);</span>
+<span class="normal">                    marked</span><span class="symbol">.</span><span class="function">add</span><span class="symbol">(</span><span class="normal">w</span><span class="symbol">);</span>
+<span class="normal">                </span><span class="cbracket">}</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+
+<span class="normal">        </span><span class="cbracket">}</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:26:00 EDT 2022.
+</small></address>
+
+</html>

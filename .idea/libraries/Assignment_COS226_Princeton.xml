@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Assignment COS226 Princeton">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/wordnet.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/queues.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/kdtree.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/burrows.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/fraud.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/seam.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/autocomplete.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Assignment_Cousera/Assignment COS226 Princeton/percolation.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang = "en">
+
+<head>
+
+<link rel="shortcut icon" href="https://algs4.cs.princeton.edu/favicon.ico">
+<link rel="stylesheet"    href="https://algs4.cs.princeton.edu/java.css" type="text/css">
+
+<title>MemoryOfBSTs.java</title>
+
+<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<meta NAME="AUTHOR" CONTENT="Robert Sedgewick and Kevin Wayne">
+<meta NAME="DESCRIPTION" CONTENT="MemoryOfBSTs code in Java">
+<meta NAME="TITLE" CONTENT="MemoryOfBSTs code in Java">
+<meta NAME="KEYWORDS" CONTENT="MemoryOfBSTs,java,programming,computer science,algorithm,data structure,program,code">
+<meta NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+
+</head>
+
+
+<body>
+<center><h1>MemoryOfBSTs.java</h1></center><p><br>
+
+Below is the syntax highlighted version of <a href = "MemoryOfBSTs.java">MemoryOfBSTs.java</a>
+from <a href = "https://algs4.cs.princeton.edu/33balanced">&#167;3.3 Balanced Search Trees</a>.
+<p><br>
+
+<!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="comment">/******************************************************************************</span>
+<span class="comment"> *  Compilation:  javac -cp .:classmexer.jar MemoryOfBSTs.java</span>
+<span class="comment"> *  Execution:    java  -cp .:classmexer.jar -XX:-UseCompressedOops -javaagent:classmexer.jar MemoryOfBSTs</span>
+<span class="comment"> *  Dependencies: StdOut.java classmexer.jar</span>
+<span class="comment"> *</span>
+<span class="comment"> ******************************************************************************/</span>
+
+<span class="preproc">import</span><span class="normal"> com</span><span class="symbol">.</span><span class="normal">javamex</span><span class="symbol">.</span><span class="normal">classmexer</span><span class="symbol">.</span><span class="normal">MemoryUtil</span><span class="symbol">;</span>
+
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">LinkedList</span><span class="symbol">;</span>
+<span class="preproc">import</span><span class="normal"> java</span><span class="symbol">.</span><span class="normal">util</span><span class="symbol">.</span><span class="normal">TreeMap</span><span class="symbol">;</span>
+
+<span class="keyword">public</span><span class="normal"> </span><span class="keyword">class</span><span class="normal"> </span><span class="classname">MemoryOfBSTs</span><span class="normal"> </span><span class="cbracket">{</span>
+
+<span class="normal">    </span><span class="keyword">public</span><span class="normal"> </span><span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="normal">String</span><span class="symbol">[]</span><span class="normal"> args</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">        </span><span class="type">int</span><span class="symbol">[]</span><span class="normal"> sizes </span><span class="symbol">=</span><span class="normal"> </span><span class="cbracket">{</span><span class="normal"> </span><span class="number">8</span><span class="symbol">,</span><span class="normal"> </span><span class="number">16</span><span class="symbol">,</span><span class="normal"> </span><span class="number">32</span><span class="symbol">,</span><span class="normal"> </span><span class="number">64</span><span class="symbol">,</span><span class="normal"> </span><span class="number">128</span><span class="symbol">,</span><span class="normal"> </span><span class="number">256</span><span class="symbol">,</span><span class="normal"> </span><span class="number">512</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1024</span><span class="symbol">,</span><span class="normal"> </span><span class="number">2048</span><span class="symbol">,</span><span class="normal"> </span><span class="number">4096</span><span class="symbol">,</span><span class="normal"> </span><span class="number">8192</span><span class="normal"> </span><span class="cbracket">}</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">int</span><span class="normal"> n </span><span class="symbol">=</span><span class="normal"> sizes</span><span class="symbol">.</span><span class="normal">length</span><span class="symbol">;</span>
+<span class="normal">        </span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> x </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">double</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> bstMemory      </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">double</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> redBlackMemory </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">double</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+<span class="normal">        </span><span class="type">double</span><span class="symbol">[]</span><span class="normal"> treeMapMemory  </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="type">double</span><span class="symbol">[</span><span class="normal">n</span><span class="symbol">];</span>
+
+<span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">            </span><span class="usertype">RedBlackBST&lt;Integer, Integer&gt;</span><span class="normal"> bst1 </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> RedBlackBST</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">,</span><span class="normal"> Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">            </span><span class="usertype">BST&lt;Integer, Integer&gt;</span><span class="normal"> bst2 </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> BST</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">,</span><span class="normal"> Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">            </span><span class="usertype">TreeMap&lt;Integer, Integer&gt;</span><span class="normal"> bst3 </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> TreeMap</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">,</span><span class="normal"> Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">            </span><span class="usertype">LinkedList&lt;Integer&gt;</span><span class="normal"> list </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> LinkedList</span><span class="symbol">&lt;</span><span class="normal">Integer</span><span class="symbol">&gt;();</span>
+<span class="normal">            </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="normal"> j </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> j </span><span class="symbol">&lt;</span><span class="normal"> sizes</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span><span class="normal"> j</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">                </span><span class="usertype">Integer</span><span class="normal"> z </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">Integer</span><span class="symbol">(</span><span class="normal">j</span><span class="symbol">);</span>
+<span class="normal">                list</span><span class="symbol">.</span><span class="function">add</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">);</span>
+<span class="normal">                bst1</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">,</span><span class="normal"> z</span><span class="symbol">);</span>
+<span class="normal">                bst2</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">,</span><span class="normal"> z</span><span class="symbol">);</span>
+<span class="normal">                bst3</span><span class="symbol">.</span><span class="function">put</span><span class="symbol">(</span><span class="normal">z</span><span class="symbol">,</span><span class="normal"> z</span><span class="symbol">);</span>
+<span class="normal">            </span><span class="cbracket">}</span>
+<span class="normal">            x</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> bst1</span><span class="symbol">.</span><span class="function">size</span><span class="symbol">();</span>
+
+<span class="normal">            bstMemory</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal">      </span><span class="symbol">=</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">deepMemoryUsageOf</span><span class="symbol">(</span><span class="normal">bst1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">deepMemoryUsageOfAll</span><span class="symbol">(</span><span class="normal">list</span><span class="symbol">);</span>
+<span class="normal">            redBlackMemory</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">deepMemoryUsageOf</span><span class="symbol">(</span><span class="normal">bst2</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">deepMemoryUsageOfAll</span><span class="symbol">(</span><span class="normal">list</span><span class="symbol">);</span>
+<span class="normal">            treeMapMemory</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">]</span><span class="normal">  </span><span class="symbol">=</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">deepMemoryUsageOf</span><span class="symbol">(</span><span class="normal">bst3</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> MemoryUtil</span><span class="symbol">.</span><span class="function">deepMemoryUsageOfAll</span><span class="symbol">(</span><span class="normal">list</span><span class="symbol">);</span>
+<span class="normal">        </span><span class="cbracket">}</span>
+
+
+<span class="normal">        </span><span class="usertype">LinearRegression</span><span class="normal"> regression1 </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">LinearRegression</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">,</span><span class="normal"> bstMemory</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Memory of BST               with n key-value pairs = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> regression1</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="usertype">LinearRegression</span><span class="normal"> regression2 </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">LinearRegression</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">,</span><span class="normal"> redBlackMemory</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Memory of RedBlackBST       with n key-value pairs = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> regression2</span><span class="symbol">);</span>
+
+<span class="normal">        </span><span class="usertype">LinearRegression</span><span class="normal"> regression3 </span><span class="symbol">=</span><span class="normal"> </span><span class="keyword">new</span><span class="normal"> </span><span class="function">LinearRegression</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">,</span><span class="normal"> treeMapMemory</span><span class="symbol">);</span>
+<span class="normal">        StdOut</span><span class="symbol">.</span><span class="function">println</span><span class="symbol">(</span><span class="string">"Memory of java.util.TreeMap with n key-value pairs = "</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> regression3</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="cbracket">}</span>
+
+<span class="cbracket">}</span>
+</tt></pre>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-10811519-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+</body>
+
+<p><br><address><small>
+Copyright &copy; 2000&ndash;2019, Robert Sedgewick and Kevin Wayne.
+<br>Last updated: Thu Aug 11 09:13:53 EDT 2022.
+</small></address>
+
+</html>
