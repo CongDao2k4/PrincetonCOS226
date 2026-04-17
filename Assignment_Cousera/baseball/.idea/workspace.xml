@@ -5,15 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1e4f978-b3bd-4ae1-84e9-9e1170bce808" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/../Assignment COS226 Princeton/autocomplete/.idea/dictionaries/lift.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Assignment COS226 Princeton/autocomplete/.idea/dictionaries/lift.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assignment COS226 Princeton/autocomplete/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Assignment COS226 Princeton/autocomplete/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assignment COS226 Princeton/autocomplete/COS 226.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Assignment COS226 Princeton/autocomplete/COS 226.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Algorithms__Part_I.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Algorithms__Part_I.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BaseballElimination.java" beforeDir="false" afterPath="$PROJECT_DIR$/BaseballElimination.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../boggle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../boggle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../kdtree/KdTree.class" beforeDir="false" afterPath="$PROJECT_DIR$/../kdtree/KdTree.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../kdtree/KdTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/../kdtree/KdTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../CachDung_RegularExpress.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../CachDung_RegularExpress.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +39,7 @@
     <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
@@ -104,7 +96,8 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/Hoc_Tap/Algorithm/Assignment_Cousera/baseball"
+    "last_opened_file_path": "D:/Hoc_Tap/Algorithm_COS226/Assignment_Cousera/baseball",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
   <component name="RunManager">

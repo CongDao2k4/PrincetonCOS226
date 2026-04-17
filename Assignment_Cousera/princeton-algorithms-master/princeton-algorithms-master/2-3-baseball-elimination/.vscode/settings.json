@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/home/vladkinoman/.bin/algs4.jar"
+    ],
+    "java.checkstyle.configuration": "/sun_checks.xml"
+}

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<!-- saved from url=(0106)https://www.coursera.org/api/rest/v1/executorruns/richfeedback?id=GVx_ZxiSEfGZqhLGExpmjw&feedbackType=HTML -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Autograder Feedback</title>
+
+</head>
+
+<body>
+
+<p>
+<em>
+See the Assessment Guide for information on how to interpret this report.
+</em>
+<br><br>
+
+</p><h2>ASSESSMENT SUMMARY</h2>
+<pre>
+Compilation:  <font color="#009900">PASSED</font>
+API:          <font color="#009900">PASSED</font>
+
+SpotBugs:     <font color="#009900">PASSED</font>
+PMD:          <font color="#009900">PASSED</font>
+Checkstyle:   <font color="#990000">FAILED (0 errors, 2 warnings)</font>
+
+Correctness:  <font color="#009900">23/23 tests passed</font>
+Memory:       <font color="#009900">4/4 tests passed</font>
+Timing:       <font color="#009900">1/1 tests passed</font>
+
+Aggregate score: 100.00%
+[ Compilation: 5%, API: 5%, Style: 0%, Correctness: 60%, Timing: 10%, Memory: 20% ]
+</pre>
+
+
+<br><br>
+
+<h2>ASSESSMENT DETAILS</h2>
+
+<pre>
+The following files were submitted:
+----------------------------------
+  848 Mar  5 12:52 Algorithms,\ Part\ II.iml
+ 187K Mar  5 12:52 Algorithms__Part_I.xml
+ 142K Mar  5 12:52 Algorithms__Part_I.xml.old
+  134 Mar  5 12:52 AnnotationType.java
+ 5.7K Mar  5 12:52 BaseballElimination.class
+ 7.8K Mar  5 12:52 BaseballElimination.java
+  189 Mar  5 12:52 Class.java
+  128 Mar  5 12:52 Enum.java
+  199 Mar  5 12:52 File\ Header.java
+  133 Mar  5 12:52 Interface.java
+ 4.2K Mar  5 12:52 Project.xml
+ 1.1M Mar  5 12:52 algs4.jar
+  353 Mar  5 12:52 algs4.xml
+  73K Mar  5 12:52 checkstyle-coursera.xml
+ 1.1K Mar  5 12:52 checkstyle-idea.xml
+ 120K Mar  5 12:52 checkstyle-lift.jar
+  15K Mar  5 12:52 checkstyle-suppressions.xml
+  15K Mar  5 12:52 codeInsightSettings.xml
+  142 Mar  5 12:52 codeStyleConfig.xml
+  353 Mar  5 12:52 compiler.xml
+  22K Mar  5 12:52 dbnavigator.xml
+  201 Mar  5 12:52 encodings.xml
+  267 Mar  5 12:52 externalDependencies.xml
+  290 Mar  5 12:52 file.template.settings.xml
+  352 Mar  5 12:52 findbugs-idea.xml
+  190 Mar  5 12:52 lift.xml
+  12K Mar  5 12:52 logo.png
+  175 Mar  5 12:52 misc.xml
+   58 Mar  5 12:52 module-info.java
+  278 Mar  5 12:52 modules.xml
+  102 Mar  5 12:52 package-info.java
+  183 Mar  5 12:52 profiles_settings.xml
+  357 Mar  5 12:52 saveactions_settings.xml
+  21K Mar  5 12:52 spotbugs.xml
+   28 Mar  5 12:52 teams1.txt
+  513 Mar  5 12:52 teams10.txt
+  711 Mar  5 12:52 teams12-allgames.txt
+  482 Mar  5 12:52 teams12.txt
+ 2.8K Mar  5 12:52 teams24.txt
+ 2.6K Mar  5 12:52 teams29.txt
+ 3.4K Mar  5 12:52 teams30.txt
+ 3.8K Mar  5 12:52 teams32.txt
+ 4.7K Mar  5 12:52 teams36.txt
+  130 Mar  5 12:52 teams4.txt
+ 7.9K Mar  5 12:52 teams42.txt
+  11K Mar  5 12:52 teams48.txt
+   98 Mar  5 12:52 teams4a.txt
+  115 Mar  5 12:52 teams4b.txt
+  167 Mar  5 12:52 teams5.txt
+ 6.0K Mar  5 12:52 teams50.txt
+  13K Mar  5 12:52 teams54.txt
+  183 Mar  5 12:52 teams5a.txt
+  167 Mar  5 12:52 teams5b.txt
+  197 Mar  5 12:52 teams5c.txt
+  16K Mar  5 12:52 teams60.txt
+  254 Mar  5 12:52 teams7.txt
+  330 Mar  5 12:52 teams8.txt
+  247 Mar  5 12:52 vcs.xml
+ 7.1K Mar  5 12:52 workspace.xml
+
+
+********************************************************************************
+*  COMPILING                                                                    
+********************************************************************************
+
+
+% javac BaseballElimination.java
+*-----------------------------------------------------------
+
+
+================================================================
+
+
+Checking the APIs of your programs.
+*-----------------------------------------------------------
+BaseballElimination:
+
+================================================================
+
+
+********************************************************************************
+*  CHECKING STYLE AND COMMON BUG PATTERNS                                       
+********************************************************************************
+
+
+% spotbugs *.class
+*-----------------------------------------------------------
+
+
+================================================================
+
+
+% pmd .
+*-----------------------------------------------------------
+
+
+================================================================
+
+
+% checkstyle *.java
+*-----------------------------------------------------------
+
+% custom checkstyle checks for BaseballElimination.java
+*-----------------------------------------------------------
+[WARN] BaseballElimination.java:40:51: The numeric literal '4' appears to be unnecessary. [NumericLiteral]
+[WARN] BaseballElimination.java:121:38: The numeric literal '4' appears to be unnecessary. [NumericLiteral]
+Checkstyle ends with 0 errors and 2 warnings.
+
+
+================================================================
+
+
+********************************************************************************
+*  TESTING CORRECTNESS
+********************************************************************************
+
+Testing correctness of BaseballElimination
+*-----------------------------------------------------------
+Running 23 total tests.
+
+Test 1: check numberOfTeams()
+  * teams4.txt
+  * teams5.txt
+  * teams8.txt
+  * teams10.txt
+  * teams29.txt
+  * teams48.txt
+==&gt; passed
+
+Test 2: check teams()
+  * teams4.txt
+  * teams5.txt
+  * teams8.txt
+  * teams10.txt
+  * teams29.txt
+  * teams48.txt
+==&gt; passed
+
+Test 3: check wins()
+  * teams4.txt
+  * teams5.txt
+  * teams8.txt
+  * teams10.txt
+  * teams29.txt
+  * teams48.txt
+==&gt; passed
+
+Test 4: check losses()
+  * teams4.txt
+  * teams5.txt
+  * teams8.txt
+  * teams10.txt
+  * teams29.txt
+  * teams48.txt
+==&gt; passed
+
+Test 5: check remaining()
+  * teams4.txt
+  * teams5.txt
+  * teams8.txt
+  * teams10.txt
+  * teams29.txt
+  * teams48.txt
+==&gt; passed
+
+Test 6: check against()
+  * teams4.txt
+  * teams5.txt
+  * teams8.txt
+  * teams10.txt
+  * teams29.txt
+  * teams48.txt
+==&gt; passed
+
+Test 7a: check isEliminated() when n = 4
+  * teams4.txt
+  * teams4a.txt
+  * teams4b.txt
+==&gt; passed
+
+Test 7b: check isEliminated() when n = 5
+  * teams5.txt
+  * teams5a.txt
+  * teams5b.txt
+  * teams5c.txt
+==&gt; passed
+
+Test 7c: check isEliminated() when n = 6 to 19
+  * teams7.txt
+  * teams8.txt
+  * teams10.txt
+  * teams12.txt
+  * teams12-allgames.txt
+==&gt; passed
+
+Test 7d: check isEliminated() when n = 20 to 30
+  * teams24.txt
+  * teams29.txt
+  * teams30.txt
+==&gt; passed
+
+Test 7e: check isEliminated() when n = 30 to 50
+  * teams32.txt
+  * teams36.txt
+  * teams42.txt
+  * teams48.txt
+==&gt; passed
+
+Test 8: check that isEliminated() is consistent with certificateOfElimination()
+  * teams4.txt
+  * teams5.txt
+  * teams8.txt
+  * teams10.txt
+  * teams29.txt
+  * teams48.txt
+==&gt; passed
+
+Test 9a: check certificateOfElimination() when n = 4
+  * teams4.txt
+  * teams4a.txt
+  * teams4b.txt
+==&gt; passed
+
+Test 9b: check certificateOfElimination() when n = 5
+  * teams5.txt
+  * teams5a.txt
+  * teams5b.txt
+  * teams5c.txt
+==&gt; passed
+
+Test 9c: check certificateOfElimination() when n = 6 to 20
+  * teams7.txt
+  * teams8.txt
+  * teams10.txt
+  * teams12.txt
+  * teams12-allgames.txt
+==&gt; passed
+
+Test 9d: check certificateOfElimination() when n = 20 to 30
+  * teams24.txt
+  * teams29.txt
+  * teams30.txt
+==&gt; passed
+
+Test 9e: check certificateOfElimination() when n = 30 to 50
+  * teams32.txt
+  * teams36.txt
+  * teams42.txt
+  * teams48.txt
+==&gt; passed
+
+Test 10: check methods when n = 1
+  * teams1.txt
+  * teams1.txt
+  * teams1.txt
+  * teams1.txt
+  * teams1.txt
+  * teams1.txt
+  * teams1.txt
+==&gt; passed
+
+Test 11: check immutability by calling certificateOfElimination() both before
+         and after calling isEliminated() and verifying that the results match
+  * teams4.txt
+  * teams5.txt
+  * teams29.txt
+==&gt; passed
+
+Test 12: check that certificateOfElimination() returns null for eliminated teams
+  * teams4.txt
+  * teams5.txt
+==&gt; passed
+
+Test 13: check for invalid arguments
+  * teams4.txt
+  * teams5.txt
+==&gt; passed
+
+Test 14: check for dependence on reference equality of strings
+==&gt; passed
+
+Test 15: check that two Baseball objects can be created at the same time
+  * teams4.txt and teams5.txt
+  * teams5.txt and teams7.txt
+==&gt; passed
+
+
+Total: 23/23 tests passed!
+
+
+================================================================
+********************************************************************************
+*  TIMING
+********************************************************************************
+
+Timing BaseballElimination
+*-----------------------------------------------------------
+Running 1 total tests.
+
+    n   constructor isEliminated() + certificateOfElimination()
+----------------------------------------------------------------
+   30       0.01       0.63
+   36       0.00       1.11
+   42       0.00       1.97
+   48       0.00       3.64
+   54       0.00       6.14
+   60       0.00      10.01
+time = 6.36e-07 * n^4.03  (R^2 = 0.99)
+
+Total: 1/1 tests passed!
+
+
+================================================================
+
+
+
+********************************************************************************
+*  MEMORY
+********************************************************************************
+
+Analyzing memory of BaseballElimination
+*-----------------------------------------------------------
+Running 4 total tests.
+
+Student   vertices     = 0.50 n^2 - 0.50 n + 2.00   (R^2 = 1.000)
+Reference vertices     = 0.50 n^2 - 0.50 n + 3.00   (R^2 = 1.000)
+=&gt; passed
+
+Student   edges        = 1.50 n^2 - 3.50 n + 2.00   (R^2 = 1.000)
+Reference edges        = 1.50 n^2 - 3.50 n + 2.00   (R^2 = 1.000)
+=&gt; passed
+
+Student   memory of G  = 176.00 n^2 - 384.00 n + 344.00   (R^2 = 1.000)
+Reference memory of G  = 176.00 n^2 - 384.00 n + 384.00   (R^2 = 1.000)
+=&gt; passed
+
+Student   memory       = 10.89 n^2 + 161.05 n + 2025.71   (R^2 = 0.988)
+Reference memory       = 3.99 n^2 + 214.25 n + 396.00   (R^2 = 1.000)
+=&gt; passed
+
+Total: 4/4 tests passed!
+
+
+================================================================
+
+
+
+
+</pre>
+
+
+</body></html>
